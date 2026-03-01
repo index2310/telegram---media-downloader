@@ -647,14 +647,18 @@
       }
     },
     "d77fb276-6a70-4a9b-b0c5-223a6a0ce63e:mm81cr1b:ykw4i2": {
-      "phase": "editing",
+      "phase": "reindex",
       "stage": "chat",
       "runId": "d77fb276-6a70-4a9b-b0c5-223a6a0ce63e:mm81cr1b:ykw4i2",
       "lastUserMessage": "the bot wont connect or response on telegram ,help me to fix it",
       "startedAt": "2026-03-01T16:06:09.929Z",
-      "updatedAt": "2026-03-01T17:42:22.214Z",
-      "message": "Preparing workspace for safe edits…",
+      "updatedAt": "2026-03-01T17:42:24.991Z",
+      "message": "Syncing environment template with used env variables…",
       "commands": [
+        {
+          "name": "health",
+          "file": "src/commands/health.js"
+        },
         {
           "name": "help",
           "file": "src/commands/help.js"
@@ -965,14 +969,18 @@
     }
   },
   "runStatus": {
-    "phase": "editing",
+    "phase": "reindex",
     "stage": "chat",
     "runId": "d77fb276-6a70-4a9b-b0c5-223a6a0ce63e:mm81cr1b:ykw4i2",
     "lastUserMessage": "the bot wont connect or response on telegram ,help me to fix it",
     "startedAt": "2026-03-01T16:06:09.929Z",
-    "updatedAt": "2026-03-01T17:42:22.214Z",
-    "message": "Preparing workspace for safe edits…",
+    "updatedAt": "2026-03-01T17:42:24.991Z",
+    "message": "Syncing environment template with used env variables…",
     "commands": [
+      {
+        "name": "health",
+        "file": "src/commands/health.js"
+      },
       {
         "name": "help",
         "file": "src/commands/help.js"

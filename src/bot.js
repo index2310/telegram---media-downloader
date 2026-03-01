@@ -1,5 +1,5 @@
-import { Bot, InputFile } from "grammy";
-import { cfg } from "./lib/config.js";
+import { Bot } from "grammy";
+
 import { safeErr } from "./lib/safeErr.js";
 import { extractFirstSupportedUrl } from "./lib/urls.js";
 import { checkRateLimit } from "./lib/rateLimit.js";
@@ -9,10 +9,11 @@ import {
   editStatusSafe,
   setStatusSafe,
 } from "./services/telegramSender.js";
+import { registerCommands } from "./commands/loader.js";
 
 const inFlightByChat = new Map();
 
-function makeBotProfile() {
+export function createBotProfile() {
   return [
     "Purpose: Download and send back public media from TikTok and X links pasted in chat.",
     "Public commands:",
@@ -20,13 +21,21 @@ function makeBotProfile() {
     "2) /help - How it works, supported links, limitations",
     "Key rules:",
     "1) Only public media works (no private/locked/age-restricted/geo-blocked/deleted content).",
-    "2) If a chat already has a download running, new links are rejected until it finishes.",
-    "3) The bot processes the first supported URL found in a message.",
+    "2) The bot processes the first supported URL found in a message.",
+    "3) For privacy: the bot only uses the link you provide; it does not ask for logins.",
   ].join("\n");
 }
 
-export function createBot(token) {
+export async function buildBot({ token, runtimeInfo, adminIds }) {
   const bot = new Bot(token);
+
+  // Make runtime info available to commands like /health
+  bot.use(async (ctx, next) => {
+    ctx.state = ctx.state || {};
+    ctx.state.runtimeInfo = runtimeInfo || {};
+    ctx.state.adminIds = Array.isArray(adminIds) ? adminIds : [];
+    await next();
+  });
 
   bot.api.config.use(async (prev, method, payload, signal) => {
     try {
@@ -44,21 +53,38 @@ export function createBot(token) {
     });
   });
 
+  // Register commands first (required so they are not swallowed by catch-all)
+  await registerCommands(bot);
+
   bot.on("message:text", async (ctx, next) => {
     const raw = ctx.message?.text || "";
     if (raw.startsWith("/")) return next();
 
     const chatId = String(ctx.chat?.id || "");
     const userId = String(ctx.from?.id || "");
+    const messageId = String(ctx.message?.message_id || "");
+
+    console.log("[update] message:text", {
+      chatId,
+      userId,
+      messageId,
+      hasUrlLike: /https?:\/\//i.test(raw),
+    });
+
     if (!chatId) return;
 
     const extracted = extractFirstSupportedUrl(raw);
 
-    if (!extracted) {
-      // Only respond if message contains at least one URL-like token.
-      // If no URLs at all, ignore.
-      if (!/https?:\/\//i.test(raw)) return;
+    console.log("[url] detect", {
+      chatId,
+      messageId,
+      platform: extracted?.platform || "",
+      supported: Boolean(extracted),
+      ignoredCount: extracted?.ignoredCount || 0,
+    });
 
+    if (!extracted) {
+      if (!/https?:\/\//i.test(raw)) return;
       await ctx.reply(
         "I can only download public media from TikTok and X links.\n\nExamples:\nhttps://www.tiktok.com/@user/video/123\nhttps://x.com/user/status/123"
       );
@@ -72,9 +98,7 @@ export function createBot(token) {
     }
 
     if (inFlightByChat.get(chatId)) {
-      await ctx.reply(
-        "I’m already downloading something for this chat—please wait."
-      );
+      await ctx.reply("I’m working on your last request—please wait.");
       return;
     }
 
@@ -88,24 +112,22 @@ export function createBot(token) {
     });
 
     if (!rlOk) {
-      await ctx.reply(
-        "You’re doing that a bit too fast. Please wait a minute and try again."
-      );
+      await ctx.reply("You’re doing that a bit too fast. Please wait a minute and try again.");
       return;
     }
 
     inFlightByChat.set(chatId, true);
 
-    const botProfile = makeBotProfile();
+    const traceId = `${Date.now()}-${chatId}-${messageId}`;
     const link = extracted.url;
 
     const startedAt = Date.now();
     console.log("[download] start", {
+      traceId,
       platform: extracted.platform,
       url: link,
       chatId,
       userId,
-      at: new Date().toISOString(),
     });
 
     let statusMsgId = null;
@@ -119,6 +141,7 @@ export function createBot(token) {
         status: async (t) => {
           await setStatusSafe(ctx, chatId, statusMsgId, t);
         },
+        trace: { traceId },
       });
 
       await setStatusSafe(ctx, chatId, statusMsgId, "Uploading to Telegram…");
@@ -126,12 +149,13 @@ export function createBot(token) {
         chatId,
         sourceUrl: link,
         result,
+        trace: { traceId },
       });
 
       const ms = Date.now() - startedAt;
       console.log("[download] done", {
+        traceId,
         platform: extracted.platform,
-        url: link,
         chatId,
         userId,
         ms,
@@ -141,6 +165,7 @@ export function createBot(token) {
     } catch (e) {
       const msg = safeErr(e);
       console.error("[download] failed", {
+        traceId,
         platform: extracted.platform,
         url: link,
         chatId,

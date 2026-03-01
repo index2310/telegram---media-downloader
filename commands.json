@@ -1,5 +1,9 @@
 [
   {
+    "name": "health",
+    "file": "src/commands/health.js"
+  },
+  {
     "name": "help",
     "file": "src/commands/help.js"
   },

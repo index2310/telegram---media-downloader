@@ -1,28 +1,7 @@
-Telegram bot that downloads public media from TikTok and X links.
 
-Requirements Node.js >= 18.
-
-How to run
-
-1. Copy .env.sample to .env and set TELEGRAM_BOT_TOKEN
-2. npm run build
-3. npm start
-
-
-Development
-
-1. Copy .env.sample to .env and set TELEGRAM_BOT_TOKEN
-2. npm run dev
-
-
-Notes
-
-.env is loaded by Node via --env-file=.env in the start/dev scripts.
-The project may still use dotenv internally in some modules without breaking anything.
-Public content only.
-Telegram file limits apply.
-Commands
-
-/start
-/help
-More details are in DOCS.md.
+Bot not responding troubleshooting
+1) Verify TELEGRAM_BOT_TOKEN is set.
+2) Look for [tg] bot.init ok and [polling] starting in logs.
+3) If you see 409 Conflict, you likely have two deployments running at once or a webhook configured. The bot will back off and retry automatically.
+4) If you configured TELEGRAM_WEBHOOK_URL but did not expose PORT, the bot will fall back to polling.
+5) Use /health (admin-only) to see update mode, DB connectivity, and last error summary.
