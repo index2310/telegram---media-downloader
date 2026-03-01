@@ -2,6 +2,11 @@
 
 All notable changes to this bot project are recorded here.
 
+## 2026-03-01 17:42:25. UTC
+- Request: the bot wont connect or response on telegram ,help me to fix it
+- Summary: Implemented robust Telegram boot + polling reliability with @grammyjs/runner (concurrency 1), added a startup banner with env sanity (no secrets), clear webhook-vs-polling fallback behavior, 409 Conflict remediation (de…
+- Files: .env.sample, DOCS.md, README.md, package.json, src/bot.js, src/commands/health.js, src/index.js, src/lib/runtime.js, src/services/downloader.js, src/services/telegramSender.js
+
 ## 2026-03-01 16:29:37. UTC
 - Request: fix installation problem by change the package.json line to this { "name": "cookmybots-telegram-bot", "version": "0.1.0", "private": true, "type": "module", "engines": { "node": ">=18" }, "scripts": { "install:root": "b…
 - Summary: Replaced root package.json to match your provided JSON exactly (scripts, deps, engines, type: module). Updated README.md and DOCS.md to instruct npm run build, npm start, and npm run dev; added Node >=18 requirement; an…

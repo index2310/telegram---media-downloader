@@ -2,13 +2,21 @@
   "projectId": "d77fb276-6a70-4a9b-b0c5-223a6a0ce63e",
   "commands": [
     {
+      "command": "/health",
+      "description": "Admin-only diagnostics: update mode, DB connectivity, AI enabled bool, uptime, and last error summary.",
+      "usage": "/health",
+      "examples": [
+        "Admin: /health → Bot: Shows polling/webhook mode and last error summary"
+      ],
+      "notes": "Only available when ADMIN_TELEGRAM_USER_IDS is set and the user is listed."
+    },
+    {
       "command": "/help",
       "description": "Shows supported sources, public-only limitation, common failure reasons, and a privacy note.",
       "usage": "/help",
       "examples": [
         "User: /help → Bot: Explains what links work and why a download might fail"
       ],
-      "example": "User: /help → Bot: Explains what links work and why a download might fail",
       "notes": "Unchanged."
     },
     {
@@ -16,9 +24,8 @@
       "description": "Welcome message plus examples of TikTok and X links you can paste.",
       "usage": "/start",
       "examples": [
-        "User: /start → Bot: Explains what to do and shows example links"
+        "User: /start → Bot: Shows examples of TikTok and X links"
       ],
-      "example": "User: /start → Bot: Explains what to do and shows example links",
       "notes": "Unchanged."
     }
   ],
@@ -46,6 +53,14 @@
     {
       "role": "assistant",
       "content": "Replaced root package.json to match your provided JSON exactly (scripts, deps, engines, type: module). Updated README.md and DOCS.md to instruct npm run build, npm start, and npm run dev; added Node >=18 requirement; and documented that .env is loaded via node --env-file while dotenv can still be used internally. No bot runtime code was changed.\n\nFiles touched (4): .env.sample, DOCS.md, README.md, package.json\nValidation: ✅ project passes syntax/basic checks after this edit."
+    },
+    {
+      "role": "user",
+      "content": "the bot wont connect or response on telegram ,help me to fix it"
+    },
+    {
+      "role": "assistant",
+      "content": "Implemented robust Telegram boot + polling reliability with @grammyjs/runner (concurrency 1), added a startup banner with env sanity (no secrets), clear webhook-vs-polling fallback behavior, 409 Conflict remediation (deleteWebhook + backoff), periodic polling/heartbeat logs, and a global error boundary. Added structured diagnostics throughout the downloader + Telegram sending pipeline, plus stronger media send fallbacks (video→document→source URL). Added an admin-only /health command gated by ADMIN_TELEGRAM_USER_IDS. Updated .env.sample and appended troubleshooting sections to README/DOCS.\n\nFiles touched (10): .env.sample, DOCS.md, README.md, package.json, src/bot.js, src/commands/health.js…\nValidation: ✅ project passes syntax/basic checks after this edit."
     }
   ],
   "createdBy": "69a43421f09020726e251d28",
@@ -652,7 +667,7 @@
       "runId": "d77fb276-6a70-4a9b-b0c5-223a6a0ce63e:mm81cr1b:ykw4i2",
       "lastUserMessage": "the bot wont connect or response on telegram ,help me to fix it",
       "startedAt": "2026-03-01T16:06:09.929Z",
-      "updatedAt": "2026-03-01T17:42:24.991Z",
+      "updatedAt": "2026-03-01T17:42:25.257Z",
       "message": "Syncing environment template with used env variables…",
       "commands": [
         {
@@ -974,7 +989,7 @@
     "runId": "d77fb276-6a70-4a9b-b0c5-223a6a0ce63e:mm81cr1b:ykw4i2",
     "lastUserMessage": "the bot wont connect or response on telegram ,help me to fix it",
     "startedAt": "2026-03-01T16:06:09.929Z",
-    "updatedAt": "2026-03-01T17:42:24.991Z",
+    "updatedAt": "2026-03-01T17:42:25.257Z",
     "message": "Syncing environment template with used env variables…",
     "commands": [
       {
@@ -1294,7 +1309,7 @@
       "key": "TELEGRAM_BOT_TOKEN",
       "title": "Telegram Bot Token",
       "description": "Token from BotFather used to connect to Telegram.",
-      "usage": "Read at startup by src/lib/config.js and validated in src/index.js.",
+      "usage": "Required at startup. The bot exits with a clear message if missing.",
       "howToGet": "Create a bot with @BotFather and copy the token.",
       "example": "123456789:AA... (format only)",
       "isSecret": true,
@@ -1343,19 +1358,19 @@
     {
       "key": "MONGODB_URI",
       "title": "MongoDB Connection String",
-      "description": "Optional MongoDB connection string for persistence where used by the bot.",
-      "usage": "Read from process.env.MONGODB_URI when present.",
-      "howToGet": "Create a MongoDB database (Atlas or self-hosted) and copy the connection string.",
-      "example": "mongodb+srv://USER:PASS@cluster0.example.mongodb.net/dbname",
+      "description": "MongoDB connection string for optional persistence (memory/logs). If missing, the bot still runs.",
+      "usage": "Used at boot to connect; failures are logged but do not block /start and /help.",
+      "howToGet": "Create a MongoDB database (Atlas or your provider) and copy the connection string.",
+      "example": "mongodb+srv://user:pass@cluster.example.mongodb.net/dbname",
       "isSecret": true,
       "required": false
     },
     {
       "key": "COOKMYBOTS_AI_ENDPOINT",
       "title": "CookMyBots AI Endpoint",
-      "description": "Base URL for the CookMyBots AI Gateway (if used by this bot).",
-      "usage": "Used by src/lib/ai.js when configured.",
-      "howToGet": "Provided by CookMyBots.",
+      "description": "Base URL for CookMyBots AI Gateway. Only used if the bot uses AI features.",
+      "usage": "Logged at startup (presence only).",
+      "howToGet": "From CookMyBots project settings.",
       "example": "https://api.cookmybots.com/api/ai",
       "isSecret": false,
       "required": false
@@ -1363,11 +1378,51 @@
     {
       "key": "COOKMYBOTS_AI_KEY",
       "title": "CookMyBots AI Key",
-      "description": "Auth key for the CookMyBots AI Gateway (if used by this bot).",
-      "usage": "Sent as Authorization: Bearer COOKMYBOTS_AI_KEY by src/lib/ai.js when configured.",
-      "howToGet": "Provided by CookMyBots.",
+      "description": "Secret key for CookMyBots AI Gateway. Only used if the bot uses AI features.",
+      "usage": "Logged at startup (presence only).",
+      "howToGet": "From CookMyBots project settings.",
       "example": "cmb_ai_... (format only)",
       "isSecret": true,
+      "required": false
+    },
+    {
+      "key": "ADMIN_TELEGRAM_USER_IDS",
+      "title": "Admin Telegram User IDs",
+      "description": "Comma-separated Telegram numeric user IDs allowed to use /health.",
+      "usage": "Parsed on boot; if empty, /health is effectively unavailable.",
+      "howToGet": "Get your Telegram numeric ID (e.g. from @userinfobot).",
+      "example": "123456789,987654321",
+      "isSecret": false,
+      "required": false
+    },
+    {
+      "key": "TELEGRAM_WEBHOOK_URL",
+      "title": "Telegram Webhook URL",
+      "description": "Optional webhook URL. This project still defaults to polling; if webhook is misconfigured it falls back to polling.",
+      "usage": "Presence is logged at boot for diagnostics.",
+      "howToGet": "Your public HTTPS URL pointing to your service.",
+      "example": "https://your-service.onrender.com/telegram/webhook",
+      "isSecret": false,
+      "required": false
+    },
+    {
+      "key": "PORT",
+      "title": "HTTP Port",
+      "description": "Port for the optional HTTP server used when considering webhook mode. Not required for polling.",
+      "usage": "If set, the bot starts a tiny server that responds 'ok'.",
+      "howToGet": "Provided by your hosting platform (Render sets PORT automatically).",
+      "example": "10000",
+      "isSecret": false,
+      "required": false
+    },
+    {
+      "key": "HEARTBEAT_MS",
+      "title": "Heartbeat Interval",
+      "description": "Interval for periodic memory/uptime logs. Helps confirm the process is alive.",
+      "usage": "Defaults to 60000 ms.",
+      "howToGet": "Set to a number of milliseconds.",
+      "example": "60000",
+      "isSecret": false,
       "required": false
     }
   ],
@@ -1377,7 +1432,7 @@
       "description": "Welcome message plus examples of TikTok and X links you can paste.",
       "usage": "/start",
       "examples": [
-        "User: /start → Bot: Explains what to do and shows example links"
+        "User: /start → Bot: Shows examples of TikTok and X links"
       ],
       "notes": "Unchanged."
     },
@@ -1389,6 +1444,15 @@
         "User: /help → Bot: Explains what links work and why a download might fail"
       ],
       "notes": "Unchanged."
+    },
+    {
+      "command": "/health",
+      "description": "Admin-only diagnostics: update mode, DB connectivity, AI enabled bool, uptime, and last error summary.",
+      "usage": "/health",
+      "examples": [
+        "Admin: /health → Bot: Shows polling/webhook mode and last error summary"
+      ],
+      "notes": "Only available when ADMIN_TELEGRAM_USER_IDS is set and the user is listed."
     }
   ]
 }
