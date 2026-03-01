@@ -1,11 +1,22 @@
 This bot downloads public media from TikTok and X links pasted into Telegram and sends the media back into the same chat.
 
+Requirements
+Node.js >= 18.
+
 Setup
 1) Create a Telegram bot with BotFather and get your token.
 2) Copy .env.sample to .env and set TELEGRAM_BOT_TOKEN.
-3) Install dependencies and run:
-   npm run install:root
-   npm run dev
+3) Install dependencies:
+   npm run build
+4) Run the bot:
+   npm start
+
+Development
+1) npm run dev
+
+Note about environment loading
+1) .env is loaded by Node via --env-file=.env (see package.json scripts).
+2) dotenv is still installed and can be used internally by the codebase without breaking anything, but it is not required for local dev when you use the provided scripts.
 
 Commands
 1) /start
