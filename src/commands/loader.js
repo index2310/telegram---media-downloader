@@ -5,23 +5,17 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 export async function registerCommands(bot) {
   const dir = path.dirname(fileURLToPath(import.meta.url));
 
-  const files = fs
+  const commandFiles = fs
     .readdirSync(dir)
-    .filter(
-      (f) =>
-        f.endsWith(".js") &&
-        f !== "loader.js" &&
-        !f.startsWith("_") &&
-        fs.statSync(path.join(dir, f)).isFile()
-    );
+    .filter((file) => file.endsWith(".js") && file !== "loader.js" && !file.startsWith("_"));
 
-  for (const f of files) {
-    const mod = await import(pathToFileURL(path.join(dir, f)).href);
-    const fn = mod?.default || mod?.register;
-    if (typeof fn === "function") {
-      await fn(bot);
+  for (const file of commandFiles) {
+    const mod = await import(pathToFileURL(path.join(dir, file)).href);
+    const handler = mod?.default || mod?.register;
+    if (typeof handler === "function") {
+      await handler(bot);
     } else {
-      console.warn("[commands] skipped", { file: f });
+      console.warn("[commands] " + file + " has no usable export; skipped.");
     }
   }
 }
