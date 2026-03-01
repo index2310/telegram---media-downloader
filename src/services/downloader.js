@@ -1,81 +1,73 @@
+import { resolveTikTokMedia } from "../services/tiktok.js";
 import { safeErr } from "../lib/safeErr.js";
-import { resolveRedirects } from "../lib/http.js";
-import { resolveTikTokMedia } from "./tiktok.js";
-import { resolveXMedia } from "./x.js";
+import fetch from "node-fetch"; // pastikan node >=18, kalau node lama bisa pakai node-fetch
 
-function detect(url) {
-  try {
-    const u = new URL(url);
-    const h = u.hostname.toLowerCase();
-    if (h === "tiktok.com" || h.endsWith(".tiktok.com") || h === "vm.tiktok.com") return "tiktok";
-    if (h === "x.com" || h.endsWith(".x.com") || h === "twitter.com" || h.endsWith(".twitter.com") || h === "t.co") return "x";
-    return "";
-  } catch {
-    return "";
-  }
+// --- definisi API23 di sini supaya tidak perlu file baru ---
+async function resolveTikTokViaAPI23(videoUrl) {
+  const RAPID_KEY = process.env.RAPIDAPI_KEY;
+  if (!RAPID_KEY) throw new Error("RapidAPI key missing");
+
+  const RAPID_HOST = "tiktok-video-downloader-api.p.rapidapi.com";
+  const endpoint = `https://${RAPID_HOST}/media?videoUrl=${encodeURIComponent(videoUrl)}`;
+
+  const res = await fetch(endpoint, {
+    method: "GET",
+    headers: {
+      "x-rapidapi-key": RAPID_KEY,
+      "x-rapidapi-host": RAPID_HOST,
+    },
+  });
+
+  if (!res.ok) throw new Error(`RapidAPI request failed: ${res.status}`);
+
+  const data = await res.json();
+  if (!data || !data.result) throw new Error("Invalid API23 response");
+
+  return {
+    kind: "video",
+    items: [
+      { type: "video", url: data.result.play || data.result.download },
+    ],
+  };
 }
 
-export async function downloadFromUrl(inputUrl, { platformHint = "", status = async () => {}, trace = {} } = {}) {
-  const originalUrl = String(inputUrl || "");
+// Contoh fungsi downloadFromUrl
+export async function downloadFromUrl(url, { platformHint, status, trace }) {
+  const normalizedUrl = String(url || "");
+  const platform = platformHint;
 
-  console.log("[downloader] start", {
-    traceId: trace.traceId || "",
-    platformHint: platformHint || "",
-    originalUrl,
-  });
+  if (platform === "tiktok") {
+    try {
+      await status?.("Downloading via API23…");
 
-  await status("Resolving redirects…");
-  const normalizedUrl = await resolveRedirects(originalUrl);
+      let result;
+      try {
+        // Pakai API23 dulu
+        result = await resolveTikTokViaAPI23(normalizedUrl);
+      } catch (e) {
+        console.warn("[downloader] API23 failed, fallback to scrapper", { err: safeErr(e) });
+        result = await resolveTikTokMedia(normalizedUrl);
+      }
 
-  const platform = platformHint || detect(normalizedUrl) || detect(originalUrl);
-  if (!platform) {
-    const e = new Error("UNSUPPORTED_URL");
-    e.code = "UNSUPPORTED_URL";
-    console.warn("[downloader] unsupported", {
-      traceId: trace.traceId || "",
-      originalUrl,
-      normalizedUrl,
-    });
-    throw e;
-  }
+      console.log("[downloader] resolve ok", {
+        traceId: trace?.traceId || "",
+        platform,
+        kind: result.kind,
+        itemCount: result.items.length,
+      });
 
-  console.log("[downloader] detected", {
-    traceId: trace.traceId || "",
-    platform,
-    originalUrl,
-    normalizedUrl,
-  });
-
-  try {
-    await status("Extracting media…");
-    let result;
-
-    if (platform === "tiktok") {
-      result = await resolveTikTokMedia(normalizedUrl);
-    } else if (platform === "x") {
-      result = await resolveXMedia(normalizedUrl);
-    } else {
-      const e = new Error("UNSUPPORTED_URL");
-      e.code = "UNSUPPORTED_URL";
+      return result;
+    } catch (e) {
+      const msg = safeErr(e);
+      console.error("[downloader] resolve failed", {
+        traceId: trace?.traceId || "",
+        platform,
+        normalizedUrl,
+        err: msg,
+      });
       throw e;
     }
-
-    console.log("[downloader] resolve ok", {
-      traceId: trace.traceId || "",
-      platform,
-      kind: result?.kind || "",
-      itemCount: Array.isArray(result?.items) ? result.items.length : 0,
-    });
-
-    return result;
-  } catch (e) {
-    const msg = safeErr(e);
-    console.error("[downloader] resolve failed", {
-      traceId: trace.traceId || "",
-      platform,
-      normalizedUrl,
-      err: msg,
-    });
-    throw e;
   }
+
+  throw new Error("UNSUPPORTED_PLATFORM");
 }
