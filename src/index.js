@@ -11,8 +11,8 @@ const cfg = getConfig(process.env);
 console.log("[startup] env present:", {
   TELEGRAM_BOT_TOKEN: Boolean(process.env.TELEGRAM_BOT_TOKEN),
   MONGODB_URI: Boolean(process.env.MONGODB_URI),
-  COOKMYBOTS_AI_ENDPOINT: Boolean(process.env.COOKMYBOTS_AI_ENDPOINT),
-  COOKMYBOTS_AI_KEY: Boolean(process.env.COOKMYBOTS_AI_KEY),
+  MEDIA_DOWNLOAD_ENDPOINT_set: !!cfg.MEDIA_DOWNLOAD_ENDPOINT,
+ MEDIA_DOWNLOAD_KEY_set: !!cfg.MEDIA_DOWNLOAD_KEY
 });
 
 if (!cfg.TELEGRAM_BOT_TOKEN) {

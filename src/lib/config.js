@@ -5,6 +5,13 @@ export const cfg = {
   RATE_LIMIT_X_PER_MIN: Number(process.env.RATE_LIMIT_X_PER_MIN || 6),
   RATE_LIMIT_TIKTOK_PER_MIN: Number(process.env.RATE_LIMIT_TIKTOK_PER_MIN || 6),
 
+// Downloader gateway
+  MEDIA_DOWNLOAD_ENDPOINT:
+    process.env.MEDIA_DOWNLOAD_ENDPOINT ||
+    "https://instagram-downloader38.p.rapidapi.com/download",
+
+  MEDIA_DOWNLOAD_KEY: process.env.MEDIA_DOWNLOAD_KEY,
+
   // Network tuning
   HTTP_TIMEOUT_MS: Number(process.env.HTTP_TIMEOUT_MS || 20_000),
   HTTP_MAX_REDIRECTS: Number(process.env.HTTP_MAX_REDIRECTS || 5),
