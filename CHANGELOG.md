@@ -2,6 +2,11 @@
 
 All notable changes to this bot project are recorded here.
 
+## 2026-03-01 16:27:55. UTC
+- Request: change the package.json to this { "name": "cookmybots-telegram-bot", "version": "0.1.0", "private": true, "type": "module", "engines": { "node": ">=18" }, "scripts": { "install:root": "bash -lc \"set -e; if [ -f package…
+- Summary: Updated package.json exactly as provided (including start/dev using node --env-file=.env) and removed the import "dotenv/config" line from src/index.js. No other behavior or logic was changed.
+- Files: .env.sample, package.json, src/index.js
+
 ## 2026-03-01 16:08:08. UTC
 - Request: create a simple bot to download media from tiktok and x ,when user paste the link of the media the bot will download and send the media to the chat ,only public media can be downloaded
 - Summary: Created a Telegram-only grammY bot that detects the first TikTok or X link in a message, posts a progress status message, downloads public media, and sends it back with Telegram-safe fallbacks (video→document, images→me…
