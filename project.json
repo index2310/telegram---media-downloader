@@ -2,24 +2,12 @@
   "projectId": "d77fb276-6a70-4a9b-b0c5-223a6a0ce63e",
   "commands": [
     {
-      "command": "/help",
-      "description": "Shows supported sources, public-only limitation, common failure reasons, and a privacy note.",
-      "usage": "/help",
-      "examples": [
-        "User: /help → Bot: Explains what links work and why a download might fail"
-      ],
-      "example": "User: /help → Bot: Explains what links work and why a download might fail",
-      "notes": "If the content is private/restricted/deleted, it cannot be downloaded."
+      "name": "help",
+      "file": "src/commands/help.js"
     },
     {
-      "command": "/start",
-      "description": "Welcome message plus examples of TikTok and X links you can paste.",
-      "usage": "/start",
-      "examples": [
-        "User: /start → Bot: Explains what to do and shows example links"
-      ],
-      "example": "User: /start → Bot: Explains what to do and shows example links",
-      "notes": "Paste a public TikTok or X link in chat to download."
+      "name": "start",
+      "file": "src/commands/start.js"
     }
   ],
   "aiMessages": [

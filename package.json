@@ -9,8 +9,8 @@
   "scripts": {
     "install:root": "bash -lc \"set -e; if [ -f package-lock.json ]; then npm ci; else npm install; fi\"",
     "build": "npm run install:root && echo build",
-    "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "start": "node --env-file=.env src/index.js",
+    "dev": "node --watch --env-file=.env src/index.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
