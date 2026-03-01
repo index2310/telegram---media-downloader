@@ -8,6 +8,7 @@
       "examples": [
         "Admin: /health → Bot: Shows polling mode and DB connected boolean"
       ],
+      "example": "Admin: /health → Bot: Shows polling mode and DB connected boolean",
       "notes": "Unchanged behavior. If ADMIN_TELEGRAM_USER_IDS is not set, this command stays effectively unavailable."
     },
     {
@@ -17,6 +18,7 @@
       "examples": [
         "User: /help → Bot: Shows how to use the bot"
       ],
+      "example": "User: /help → Bot: Shows how to use the bot",
       "notes": "Unchanged user-facing content; now uses centralized config safely."
     },
     {
@@ -26,6 +28,7 @@
       "examples": [
         "User: /start → Bot: Shows example links"
       ],
+      "example": "User: /start → Bot: Shows example links",
       "notes": "Unchanged behavior."
     }
   ],
@@ -70,7 +73,9 @@
     },
     {
       "role": "assistant",
-      "content": "Implemented deployment-safe env loading and startup diagnostics without changing the bot’s user-facing commands/behavior. The bot now best-effort loads .env locally via dotenv (won’t crash if missing), centralizes all env reads with safe defaults in src/lib/config.js, prints a single structured startup summary (booleans only, no secrets), and exits with a clear message only when TELEGRAM_BOT_TOKEN is missing. Updated README.md and DOCS.md with a deployment env vars section and a debug checklist.\n\nFiles touched (8): .env.sample, DOCS.md, README.md, package.json, src/commands/help.js, src/index.js…\nValidation: ✅ project passes syntax/basic checks after this edit."
+      "content": "Implemented deployment-safe env loading and startup diagnostics without changing the bot’s user-facing commands/behavior. The bot now best-effort loads .env locally via dotenv (won’t crash if missing), centralizes all env reads with safe defaults in src/lib/config.js, prints a single structured startup summary (booleans only, no secrets), and exits with a clear message only when TELEGRAM_BOT_TOKEN is missing. Updated README.md and DOCS.md with a deployment env vars section and a debug checklist.\n\nFiles touched (8): .env.sample, DOCS.md, README.md, package.json, src/commands/help.js, src/index.js…\nValidation: ✅ project passes syntax/basic checks after this edit.",
+      "gitBeforeSha": "e5545dd675c4994c42df5b2aad19ed7167b37a82",
+      "gitAfterSha": "f3c0ff9d96f642e46a68db8c9ad05eda3d9a3b97"
     }
   ],
   "createdBy": "69a43421f09020726e251d28",
@@ -1070,13 +1075,13 @@
       }
     },
     "d77fb276-6a70-4a9b-b0c5-223a6a0ce63e:mm8b03oz:zpedao": {
-      "phase": "reindex",
+      "phase": "done",
       "stage": "chat",
       "runId": "d77fb276-6a70-4a9b-b0c5-223a6a0ce63e:mm8b03oz:zpedao",
       "lastUserMessage": "i update some files codes and ran it locally it work perfectly ,but on this web it doesnt start because the bot cant read .env files ,help me to analize and then help me to fix this problem",
       "startedAt": "2026-03-01T16:06:09.929Z",
-      "updatedAt": "2026-03-01T22:11:47.080Z",
-      "message": "Syncing environment template with used env variables…",
+      "updatedAt": "2026-03-01T22:11:48.617Z",
+      "message": "GitHub auto-push done: f3c0ff9",
       "commands": [
         {
           "name": "health",
@@ -1097,7 +1102,7 @@
         "fileStructure": {
           ".env.sample": {
             "type": "file",
-            "content": "# Required\nTELEGRAM_BOT_TOKEN=\n\n# Optional (recommended)\nMONGODB_URI=\n\n# Optional admin diagnostics\n# Comma-separated Telegram user IDs. If not set, /health is unavailable.\nADMIN_TELEGRAM_USER_IDS=\n\n# Optional webhook configuration (polling is the default)\n# If TELEGRAM_WEBHOOK_URL is set but PORT is not listening, the bot will fall back to polling.\nTELEGRAM_WEBHOOK_URL=\nPORT=\n\n# Optional AI gateway (only used if some feature calls it)\nCOOKMYBOTS_AI_ENDPOINT=\nCOOKMYBOTS_AI_KEY=\nAI_TIMEOUT_MS=600000\nAI_MAX_RETRIES=2\n\n# Optional tuning\nRATE_LIMIT_X_PER_MIN=6\nRATE_LIMIT_TIKTOK_PER_MIN=6\nHTTP_TIMEOUT_MS=20000\nHTTP_RETRIES=2\nHTTP_MAX_REDIRECTS=5\nMAX_MEDIA_BYTES=47185920\n\n# Optional logs\nHEARTBEAT_MS=60000\n\n# Auto-synced env keys detected from process.env usage:\nHTTP_USER_AGENT=\nMEDIA_DOWNLOAD_ENDPOINT=\nMEDIA_DOWNLOAD_KEY=\n\n"
+            "content": "# Required environment variables\nNODE_ENV=production\nTELEGRAM_BOT_TOKEN=\n\n# Auto-synced env keys detected from process.env usage:\nHTTP_USER_AGENT=\nRAPIDAPI_KEY=\nRATE_LIMIT_TIKTOK_PER_MIN=\nRATE_LIMIT_X_PER_MIN=\n\n"
           },
           ".render.json": {
             "type": "file",
@@ -1105,15 +1110,15 @@
           },
           "CHANGELOG.md": {
             "type": "file",
-            "content": "# Changelog\n\nAll notable changes to this bot project are recorded here.\n\n## 2026-03-01 17:42:25. UTC\n- Request: the bot wont connect or response on telegram ,help me to fix it\n- Summary: Implemented robust Telegram boot + polling reliability with @grammyjs/runner (concurrency 1), added a startup banner with env sanity (no secrets), clear webhook-vs-polling fallback behavior, 409 Conflict remediation (de…\n- Files: .env.sample, DOCS.md, README.md, package.json, src/bot.js, src/commands/health.js, src/index.js, src/lib/runtime.js, src/services/downloader.js, src/services/telegramSender.js\n\n## 2026-03-01 16:29:37. UTC\n- Request: fix installation problem by change the package.json line to this { \"name\": \"cookmybots-telegram-bot\", \"version\": \"0.1.0\", \"private\": true, \"type\": \"module\", \"engines\": { \"node\": \">=18\" }, \"scripts\": { \"install:root\": \"b…\n- Summary: Replaced root package.json to match your provided JSON exactly (scripts, deps, engines, type: module). Updated README.md and DOCS.md to instruct npm run build, npm start, and npm run dev; added Node >=18 requirement; an…\n- Files: .env.sample, DOCS.md, README.md, package.json\n\n## 2026-03-01 16:27:55. UTC\n- Request: change the package.json to this { \"name\": \"cookmybots-telegram-bot\", \"version\": \"0.1.0\", \"private\": true, \"type\": \"module\", \"engines\": { \"node\": \">=18\" }, \"scripts\": { \"install:root\": \"bash -lc \\\"set -e; if [ -f package…\n- Summary: Updated package.json exactly as provided (including start/dev using node --env-file=.env) and removed the import \"dotenv/config\" line from src/index.js. No other behavior or logic was changed.\n- Files: .env.sample, package.json, src/index.js\n\n## 2026-03-01 16:08:08. UTC\n- Request: create a simple bot to download media from tiktok and x ,when user paste the link of the media the bot will download and send the media to the chat ,only public media can be downloaded\n- Summary: Created a Telegram-only grammY bot that detects the first TikTok or X link in a message, posts a progress status message, downloads public media, and sends it back with Telegram-safe fallbacks (video→document, images→me…\n- Files: .env.sample, DOCS.md, README.md, package.json, src/bot.js, src/commands/help.js, src/commands/loader.js, src/commands/start.js, src/index.js, src/lib/config.js, src/lib/http.js, src/lib/rateLimit.js, src/lib/safeErr.js, src/lib/urls.js (+4 more)\n\n"
+            "content": "# Changelog\n\nAll notable changes to this bot project are recorded here.\n\n## 2026-03-01 22:11:46. UTC\n- Request: i update some files codes and ran it locally it work perfectly ,but on this web it doesnt start because the bot cant read .env files ,help me to analize and then help me to fix this problem\n- Summary: Implemented deployment-safe env loading and startup diagnostics without changing the bot’s user-facing commands/behavior. The bot now best-effort loads .env locally via dotenv (won’t crash if missing), centralizes all e…\n- Files: .env.sample, DOCS.md, README.md, package.json, src/commands/help.js, src/index.js, src/lib/config.js, src/lib/env.js\n\n## 2026-03-01 17:42:25. UTC\n- Request: the bot wont connect or response on telegram ,help me to fix it\n- Summary: Implemented robust Telegram boot + polling reliability with @grammyjs/runner (concurrency 1), added a startup banner with env sanity (no secrets), clear webhook-vs-polling fallback behavior, 409 Conflict remediation (de…\n- Files: .env.sample, DOCS.md, README.md, package.json, src/bot.js, src/commands/health.js, src/index.js, src/lib/runtime.js, src/services/downloader.js, src/services/telegramSender.js\n\n## 2026-03-01 16:29:37. UTC\n- Request: fix installation problem by change the package.json line to this { \"name\": \"cookmybots-telegram-bot\", \"version\": \"0.1.0\", \"private\": true, \"type\": \"module\", \"engines\": { \"node\": \">=18\" }, \"scripts\": { \"install:root\": \"b…\n- Summary: Replaced root package.json to match your provided JSON exactly (scripts, deps, engines, type: module). Updated README.md and DOCS.md to instruct npm run build, npm start, and npm run dev; added Node >=18 requirement; an…\n- Files: .env.sample, DOCS.md, README.md, package.json\n\n## 2026-03-01 16:27:55. UTC\n- Request: change the package.json to this { \"name\": \"cookmybots-telegram-bot\", \"version\": \"0.1.0\", \"private\": true, \"type\": \"module\", \"engines\": { \"node\": \">=18\" }, \"scripts\": { \"install:root\": \"bash -lc \\\"set -e; if [ -f package…\n- Summary: Updated package.json exactly as provided (including start/dev using node --env-file=.env) and removed the import \"dotenv/config\" line from src/index.js. No other behavior or logic was changed.\n- Files: .env.sample, package.json, src/index.js\n\n## 2026-03-01 16:08:08. UTC\n- Request: create a simple bot to download media from tiktok and x ,when user paste the link of the media the bot will download and send the media to the chat ,only public media can be downloaded\n- Summary: Created a Telegram-only grammY bot that detects the first TikTok or X link in a message, posts a progress status message, downloads public media, and sends it back with Telegram-safe fallbacks (video→document, images→me…\n- Files: .env.sample, DOCS.md, README.md, package.json, src/bot.js, src/commands/help.js, src/commands/loader.js, src/commands/start.js, src/index.js, src/lib/config.js, src/lib/http.js, src/lib/rateLimit.js, src/lib/safeErr.js, src/lib/urls.js (+4 more)\n\n"
           },
           "DOCS.md": {
             "type": "file",
-            "content": "\nBot not responding troubleshooting\n1) Check TELEGRAM_BOT_TOKEN is set in your environment.\n2) If you see 409 Conflict in logs, another instance may be running or a webhook is set. Stop other instances, or clear webhook, then restart.\n3) This bot prefers polling (getUpdates). If you set TELEGRAM_WEBHOOK_URL without a working PORT listener, it will log a warning and still use polling.\n4) Check logs for [polling] starting and [polling] alive lines. If missing, the process may not be starting.\n5) If MongoDB connection fails, the bot should still respond to /start and /help; check [db] connect failed logs for details.\n"
+            "content": "\n\nDeployment env vars\nHosting environments usually do not provide a .env file at runtime. This bot will try to load a local .env if it exists, but in production you must set environment variables in your hosting dashboard.\n\nEnvironment variable mapping\nSet these keys in your host dashboard exactly as written:\n\n1) TELEGRAM_BOT_TOKEN\nRequired. Telegram token from BotFather.\n\n2) MONGODB_URI\nOptional. If not set, the bot will run with DB features disabled.\n\n3) ADMIN_TELEGRAM_USER_IDS\nOptional. Comma-separated Telegram user IDs. If not set, the /health command is effectively unavailable.\n\n4) COOKMYBOTS_AI_ENDPOINT\nOptional. Enables AI gateway calls only if COOKMYBOTS_AI_KEY is also set.\n\n5) COOKMYBOTS_AI_KEY\nOptional. Enables AI gateway calls only if COOKMYBOTS_AI_ENDPOINT is also set.\n\n6) PORT\nOptional. Defaults to 3000.\n\n7) NODE_ENV\nOptional. Defaults to development.\n\nDebug checklist\n1) Confirm TELEGRAM_BOT_TOKEN is set in the hosting dashboard.\n2) Redeploy after changing env vars.\n3) Check logs for the single [startup] env line. It shows which env vars are set using booleans only.\n4) If the bot exits immediately, the logs will say which required env var is missing.\n"
           },
           "README.md": {
             "type": "file",
-            "content": "\nBot not responding troubleshooting\n1) Verify TELEGRAM_BOT_TOKEN is set.\n2) Look for [tg] bot.init ok and [polling] starting in logs.\n3) If you see 409 Conflict, you likely have two deployments running at once or a webhook configured. The bot will back off and retry automatically.\n4) If you configured TELEGRAM_WEBHOOK_URL but did not expose PORT, the bot will fall back to polling.\n5) Use /health (admin-only) to see update mode, DB connectivity, and last error summary.\n"
+            "content": "\n\nDeployment env vars\nMost hosting platforms do not mount your local .env file into the running container. This bot will load .env only when it exists locally, but production must use real environment variables set in the host dashboard.\n\nEnv var mapping (copy keys exactly)\n1) TELEGRAM_BOT_TOKEN (required)\n2) MONGODB_URI (optional)\n3) ADMIN_TELEGRAM_USER_IDS (optional)\n4) COOKMYBOTS_AI_ENDPOINT (optional, requires COOKMYBOTS_AI_KEY)\n5) COOKMYBOTS_AI_KEY (optional, requires COOKMYBOTS_AI_ENDPOINT)\n6) PORT (optional, default 3000)\n7) NODE_ENV (optional, default development)\n\nDebug checklist\n1) Set TELEGRAM_BOT_TOKEN in the dashboard and redeploy.\n2) Open logs and look for [startup] env. It prints booleans only (no secrets).\n3) If you see missing TELEGRAM_BOT_TOKEN, the bot will exit with a clear message.\n"
           },
           "package.json": {
             "type": "file",
@@ -1149,7 +1154,7 @@
               },
               "index.js": {
                 "type": "file",
-                "content": "import http from \"node:http\";\n\nimport { run } from \"@grammyjs/runner\";\nimport { cfg } from \"./lib/config.js\";\nimport { safeErr } from \"./lib/safeErr.js\";\nimport { getDb } from \"./lib/db.js\";\nimport { buildBot } from \"./bot.js\";\nimport { getLastError, parseAdminIds, setLastError } from \"./lib/runtime.js\";\n\nprocess.on(\"unhandledRejection\", (e) => {\n  console.error(\"[process] unhandledRejection\", { err: safeErr(e) });\n  process.exit(1);\n});\nprocess.on(\"uncaughtException\", (e) => {\n  console.error(\"[process] uncaughtException\", { err: safeErr(e) });\n  process.exit(1);\n});\n\nasync function sleep(ms) {\n  await new Promise((r) => setTimeout(r, ms));\n}\n\nlet pollRunner = null;\nlet restartLock = false;\n\nfunction startHeartbeat() {\n  const intervalMs = Number(process.env.HEARTBEAT_MS || 60_000);\n  if (!Number.isFinite(intervalMs) || intervalMs <= 0) return;\n\n  setInterval(() => {\n    const m = process.memoryUsage();\n    console.log(\"[heartbeat]\", {\n      uptimeS: Math.floor(process.uptime()),\n      rssMB: Math.round(m.rss / 1e6),\n      heapUsedMB: Math.round(m.heapUsed / 1e6),\n    });\n  }, intervalMs).unref();\n}\n\nasync function maybeStartWebhookServer() {\n  const port = Number(process.env.PORT || 0);\n  if (!port) return { server: null, listening: false, port: 0 };\n\n  const server = http.createServer((req, res) => {\n    // This project primarily uses long polling.\n    // If a webhook is configured in the future, this server can be extended to receive updates.\n    res.statusCode = 200;\n    res.setHeader(\"Content-Type\", \"text/plain\");\n    res.end(\"ok\");\n  });\n\n  await new Promise((resolve) => server.listen(port, resolve));\n  console.log(\"[http] listening\", { port });\n\n  return { server, listening: true, port };\n}\n\nasync function startPolling(bot, runtimeInfo) {\n  let backoffMs = 2000;\n\n  for (;;) {\n    try {\n      console.log(\"[polling] starting\", { concurrency: 1 });\n\n      // Use runner for stable long polling.\n      // Concurrency is kept at 1 to avoid runaway backlog/memory.\n      pollRunner = run(bot, { concurrency: 1 });\n\n      runtimeInfo.updateMode = \"polling\";\n\n      // Small periodic log so we can see it's alive even when idle\n      let lastLog = Date.now();\n      const tick = setInterval(() => {\n        const now = Date.now();\n        if (now - lastLog > 60_000) {\n          console.log(\"[polling] alive\");\n          lastLog = now;\n        }\n      }, 30_000);\n      tick.unref();\n\n      await pollRunner.task();\n\n      console.warn(\"[polling] runner stopped (will restart)\");\n    } catch (e) {\n      const msg = safeErr(e);\n      setLastError(e);\n      console.error(\"[polling] error\", { err: msg });\n\n      // Telegram conflict (another instance polling, or webhook set)\n      if (/409|Conflict/i.test(msg)) {\n        console.warn(\"[polling] conflict detected\", {\n          hint: \"Another instance may be running, or a webhook is set. Will backoff and retry.\",\n          backoffMs,\n        });\n\n        try {\n          // Safe remediation: clear webhook before polling\n          await bot.api.deleteWebhook({ drop_pending_updates: true });\n          console.log(\"[polling] deleteWebhook ok\");\n        } catch (e2) {\n          console.warn(\"[polling] deleteWebhook failed\", { err: safeErr(e2) });\n        }\n      }\n\n      await sleep(backoffMs);\n      backoffMs = Math.min(20_000, Math.round(backoffMs * 1.8));\n    } finally {\n      try {\n        pollRunner?.abort?.();\n      } catch {}\n      pollRunner = null;\n    }\n  }\n}\n\nasync function boot() {\n  const adminIds = parseAdminIds(process.env.ADMIN_TELEGRAM_USER_IDS);\n  const webhookUrl = String(process.env.TELEGRAM_WEBHOOK_URL || \"\").trim();\n\n  const runtimeInfo = {\n    updateMode: \"unknown\",\n    telegramTokenSet: Boolean(cfg.TELEGRAM_BOT_TOKEN),\n    dbConnected: false,\n    aiEnabled: Boolean(process.env.COOKMYBOTS_AI_ENDPOINT) && Boolean(process.env.COOKMYBOTS_AI_KEY),\n    lastError: \"\",\n  };\n\n  console.log(\"[boot]\", {\n    nodeEnv: process.env.NODE_ENV || \"\",\n    telegramTokenSet: Boolean(cfg.TELEGRAM_BOT_TOKEN),\n    mongodbUriSet: Boolean(process.env.MONGODB_URI),\n    cookmybotsAiEndpointSet: Boolean(process.env.COOKMYBOTS_AI_ENDPOINT),\n    cookmybotsAiKeySet: Boolean(process.env.COOKMYBOTS_AI_KEY),\n    webhookUrlSet: Boolean(webhookUrl),\n    portSet: Boolean(process.env.PORT),\n    adminIdsConfigured: adminIds.length > 0,\n  });\n\n  if (!cfg.TELEGRAM_BOT_TOKEN) {\n    console.error(\"TELEGRAM_BOT_TOKEN is required. Set it in your environment (or .env for local dev).\");\n    process.exit(1);\n  }\n\n  startHeartbeat();\n\n  // DB is optional; never block bot boot on DB issues.\n  if (process.env.MONGODB_URI) {\n    try {\n      const db = await getDb(process.env.MONGODB_URI);\n      runtimeInfo.dbConnected = Boolean(db);\n      console.log(\"[db] connect ok\", { connected: runtimeInfo.dbConnected });\n    } catch (e) {\n      setLastError(e);\n      console.warn(\"[db] connect failed\", { err: safeErr(e) });\n      runtimeInfo.dbConnected = false;\n    }\n  } else {\n    console.warn(\"[db] disabled (MONGODB_URI not set)\");\n  }\n\n  const { listening } = await maybeStartWebhookServer();\n\n  // Decide update mode.\n  // Prefer polling unless webhook is explicitly configured AND an HTTP port is listening.\n  const webhookReady = Boolean(webhookUrl) && Boolean(listening);\n\n  const bot = await buildBot({ token: cfg.TELEGRAM_BOT_TOKEN, runtimeInfo, adminIds });\n\n  // Ensure bot.init + set commands are not fatal\n  try {\n    await bot.init();\n    console.log(\"[tg] bot.init ok\", { username: bot.botInfo?.username || \"\" });\n  } catch (e) {\n    setLastError(e);\n    console.warn(\"[tg] bot.init failed (continuing)\", { err: safeErr(e) });\n  }\n\n  try {\n    await bot.api.setMyCommands([\n      { command: \"start\", description: \"Welcome and examples\" },\n      { command: \"help\", description: \"Supported links and troubleshooting\" },\n    ]);\n  } catch (e) {\n    setLastError(e);\n    console.warn(\"[tg] setMyCommands failed (continuing)\", { err: safeErr(e) });\n  }\n\n  if (!webhookReady) {\n    if (webhookUrl && !listening) {\n      console.warn(\"[webhook] TELEGRAM_WEBHOOK_URL is set but PORT is not listening; falling back to polling\");\n    } else {\n      console.log(\"[webhook] not configured; using polling\");\n    }\n\n    // Always clear webhook when polling to avoid conflicts\n    try {\n      await bot.api.deleteWebhook({ drop_pending_updates: true });\n      console.log(\"[tg] deleteWebhook ok\");\n    } catch (e) {\n      setLastError(e);\n      console.warn(\"[tg] deleteWebhook failed (continuing)\", { err: safeErr(e) });\n    }\n\n    // Keep runtimeInfo updated for /health\n    setInterval(() => {\n      runtimeInfo.lastError = getLastError();\n    }, 5000).unref();\n\n    await startPolling(bot, runtimeInfo);\n    return;\n  }\n\n  // Webhook mode placeholder: not enabled in this project by default.\n  // We log and then still fall back to polling so the bot always works.\n  console.warn(\"[webhook] webhook mode is not implemented in this bot. Falling back to polling.\");\n\n  try {\n    await bot.api.deleteWebhook({ drop_pending_updates: true });\n  } catch {}\n\n  setInterval(() => {\n    runtimeInfo.lastError = getLastError();\n  }, 5000).unref();\n\n  await startPolling(bot, runtimeInfo);\n}\n\nboot().catch((e) => {\n  console.error(\"[boot] fatal\", { err: safeErr(e) });\n  process.exit(1);\n});\n"
+                "content": "import { loadEnvBestEffort } from \"./lib/env.js\";\n\n// Must happen before any module reads process.env\nloadEnvBestEffort();\n\nimport http from \"node:http\";\n\nimport { run } from \"@grammyjs/runner\";\nimport { cfg, assertRequiredConfig, getBootConfigSummary } from \"./lib/config.js\";\nimport { safeErr } from \"./lib/safeErr.js\";\nimport { getDb } from \"./lib/db.js\";\nimport { buildBot } from \"./bot.js\";\nimport { getLastError, parseAdminIds, setLastError } from \"./lib/runtime.js\";\n\nprocess.on(\"unhandledRejection\", (e) => {\n  console.error(\"[process] unhandledRejection\", { err: safeErr(e) });\n  process.exit(1);\n});\nprocess.on(\"uncaughtException\", (e) => {\n  console.error(\"[process] uncaughtException\", { err: safeErr(e) });\n  process.exit(1);\n});\n\nasync function sleep(ms) {\n  await new Promise((r) => setTimeout(r, ms));\n}\n\nlet pollRunner = null;\n\nfunction startHeartbeat() {\n  const intervalMs = Number(cfg.HEARTBEAT_MS || 60_000);\n  if (!Number.isFinite(intervalMs) || intervalMs <= 0) return;\n\n  setInterval(() => {\n    const m = process.memoryUsage();\n    console.log(\"[heartbeat]\", {\n      uptimeS: Math.floor(process.uptime()),\n      rssMB: Math.round(m.rss / 1e6),\n      heapUsedMB: Math.round(m.heapUsed / 1e6),\n    });\n  }, intervalMs).unref();\n}\n\nasync function maybeStartWebhookServer() {\n  const port = Number(cfg.PORT || 0);\n  if (!port) return { server: null, listening: false, port: 0 };\n\n  const server = http.createServer((req, res) => {\n    res.statusCode = 200;\n    res.setHeader(\"Content-Type\", \"text/plain\");\n    res.end(\"ok\");\n  });\n\n  await new Promise((resolve) => server.listen(port, resolve));\n  console.log(\"[http] listening\", { port });\n\n  return { server, listening: true, port };\n}\n\nasync function startPolling(bot, runtimeInfo) {\n  let backoffMs = 2000;\n\n  for (;;) {\n    try {\n      console.log(\"[polling] starting\", { concurrency: 1 });\n\n      pollRunner = run(bot, { concurrency: 1 });\n      runtimeInfo.updateMode = \"polling\";\n\n      let lastLog = Date.now();\n      const tick = setInterval(() => {\n        const now = Date.now();\n        if (now - lastLog > 60_000) {\n          console.log(\"[polling] alive\");\n          lastLog = now;\n        }\n      }, 30_000);\n      tick.unref();\n\n      await pollRunner.task();\n\n      console.warn(\"[polling] runner stopped (will restart)\");\n    } catch (e) {\n      const msg = safeErr(e);\n      setLastError(e);\n      console.error(\"[polling] error\", { err: msg });\n\n      if (/409|Conflict/i.test(msg)) {\n        console.warn(\"[polling] conflict detected\", {\n          hint: \"Another instance may be running, or a webhook is set. Will backoff and retry.\",\n          backoffMs,\n        });\n\n        try {\n          await bot.api.deleteWebhook({ drop_pending_updates: true });\n          console.log(\"[polling] deleteWebhook ok\");\n        } catch (e2) {\n          console.warn(\"[polling] deleteWebhook failed\", { err: safeErr(e2) });\n        }\n      }\n\n      await sleep(backoffMs);\n      backoffMs = Math.min(20_000, Math.round(backoffMs * 1.8));\n    } finally {\n      try {\n        pollRunner?.abort?.();\n      } catch {}\n      pollRunner = null;\n    }\n  }\n}\n\nasync function boot() {\n  const adminIds = parseAdminIds(cfg.ADMIN_TELEGRAM_USER_IDS);\n  const webhookUrl = String(cfg.TELEGRAM_WEBHOOK_URL || \"\").trim();\n\n  const runtimeInfo = {\n    updateMode: \"unknown\",\n    telegramTokenSet: Boolean(cfg.TELEGRAM_BOT_TOKEN),\n    dbConnected: false,\n    aiEnabled: Boolean(cfg.AI_ENABLED),\n    lastError: \"\",\n  };\n\n  // Single structured startup summary (no secrets)\n  console.log(\"[startup] env\", {\n    ...getBootConfigSummary(cfg),\n    runningMode: \"polling\",\n    webhookUrlSet: Boolean(webhookUrl),\n  });\n\n  assertRequiredConfig(cfg);\n\n  startHeartbeat();\n\n  if (cfg.MONGODB_URI) {\n    try {\n      const db = await getDb(cfg.MONGODB_URI);\n      runtimeInfo.dbConnected = Boolean(db);\n      console.log(\"[db] connect ok\", { connected: runtimeInfo.dbConnected });\n    } catch (e) {\n      setLastError(e);\n      console.warn(\"[db] connect failed\", { err: safeErr(e) });\n      runtimeInfo.dbConnected = false;\n    }\n  } else {\n    console.warn(\"[db] disabled (MONGODB_URI not set)\");\n  }\n\n  const { listening } = await maybeStartWebhookServer();\n\n  const webhookReady = Boolean(webhookUrl) && Boolean(listening);\n\n  const bot = await buildBot({ token: cfg.TELEGRAM_BOT_TOKEN, runtimeInfo, adminIds });\n\n  try {\n    await bot.init();\n    console.log(\"[tg] bot.init ok\", { username: bot.botInfo?.username || \"\" });\n  } catch (e) {\n    setLastError(e);\n    console.warn(\"[tg] bot.init failed (continuing)\", { err: safeErr(e) });\n  }\n\n  try {\n    await bot.api.setMyCommands([\n      { command: \"start\", description: \"Welcome and examples\" },\n      { command: \"help\", description: \"Supported links and troubleshooting\" },\n    ]);\n  } catch (e) {\n    setLastError(e);\n    console.warn(\"[tg] setMyCommands failed (continuing)\", { err: safeErr(e) });\n  }\n\n  if (!webhookReady) {\n    if (webhookUrl && !listening) {\n      console.warn(\n        \"[webhook] TELEGRAM_WEBHOOK_URL is set but PORT is not listening; falling back to polling\"\n      );\n    } else {\n      console.log(\"[webhook] not configured; using polling\");\n    }\n\n    try {\n      await bot.api.deleteWebhook({ drop_pending_updates: true });\n      console.log(\"[tg] deleteWebhook ok\");\n    } catch (e) {\n      setLastError(e);\n      console.warn(\"[tg] deleteWebhook failed (continuing)\", { err: safeErr(e) });\n    }\n\n    setInterval(() => {\n      runtimeInfo.lastError = getLastError();\n    }, 5000).unref();\n\n    await startPolling(bot, runtimeInfo);\n    return;\n  }\n\n  console.warn(\"[webhook] webhook mode is not implemented in this bot. Falling back to polling.\");\n\n  try {\n    await bot.api.deleteWebhook({ drop_pending_updates: true });\n  } catch {}\n\n  setInterval(() => {\n    runtimeInfo.lastError = getLastError();\n  }, 5000).unref();\n\n  await startPolling(bot, runtimeInfo);\n}\n\nboot().catch((e) => {\n  console.error(\"[boot] fatal\", { err: safeErr(e) });\n  process.exit(1);\n});\n"
               },
               "lib": {
                 "type": "dir",
@@ -1164,11 +1169,15 @@
                   },
                   "config.js": {
                     "type": "file",
-                    "content": "export const cfg = {\n  TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,\n\n  // Optional rate limit tuning\n  RATE_LIMIT_X_PER_MIN: Number(process.env.RATE_LIMIT_X_PER_MIN || 6),\n  RATE_LIMIT_TIKTOK_PER_MIN: Number(process.env.RATE_LIMIT_TIKTOK_PER_MIN || 6),\n\n  // Downloader gateway\n  MEDIA_DOWNLOAD_ENDPOINT:process.env.MEDIA_DOWNLOAD_ENDPOINT ,\n MEDIA_DOWNLOAD_KEY: process.env.MEDIA_DOWNLOAD_KEY,\n\n  // Network tuning\n  HTTP_TIMEOUT_MS: Number(process.env.HTTP_TIMEOUT_MS || 20_000),\n  HTTP_MAX_REDIRECTS: Number(process.env.HTTP_MAX_REDIRECTS || 5),\n  HTTP_RETRIES: Number(process.env.HTTP_RETRIES || 2),\n  MAX_MEDIA_BYTES: Number(process.env.MAX_MEDIA_BYTES || 45 * 1024 * 1024),\n};\n"
+                    "content": "function toInt(v, fallback) {\n  const n = Number(v);\n  return Number.isFinite(n) ? n : fallback;\n}\n\nfunction toBool(v) {\n  const s = String(v || \"\").trim().toLowerCase();\n  if (!s) return false;\n  return s === \"1\" || s === \"true\" || s === \"yes\" || s === \"on\";\n}\n\nfunction parseAdminIds(raw) {\n  const s = String(raw || \"\").trim();\n  if (!s) return [];\n  return s\n    .split(\",\")\n    .map((x) => x.trim())\n    .filter(Boolean);\n}\n\nexport function getBootConfigSummary(cfg) {\n  const adminCount = Array.isArray(cfg.ADMIN_TELEGRAM_USER_IDS)\n    ? cfg.ADMIN_TELEGRAM_USER_IDS.length\n    : 0;\n\n  return {\n    nodeEnv: cfg.NODE_ENV,\n    port: cfg.PORT,\n    telegramTokenSet: Boolean(cfg.TELEGRAM_BOT_TOKEN),\n    adminIdsSet: adminCount > 0,\n    adminIdsCount: adminCount,\n    mongodbUriSet: Boolean(cfg.MONGODB_URI),\n    cookmybotsAiEndpointSet: Boolean(cfg.COOKMYBOTS_AI_ENDPOINT),\n    cookmybotsAiKeySet: Boolean(cfg.COOKMYBOTS_AI_KEY),\n    aiEnabled: Boolean(cfg.AI_ENABLED),\n  };\n}\n\nexport function getConfig(env = process.env) {\n  const cfg = {\n    NODE_ENV: String(env.NODE_ENV || \"development\"),\n    PORT: toInt(env.PORT, 3000),\n\n    TELEGRAM_BOT_TOKEN: String(env.TELEGRAM_BOT_TOKEN || \"\"),\n\n    // Optional\n    TELEGRAM_WEBHOOK_URL: String(env.TELEGRAM_WEBHOOK_URL || \"\"),\n\n    // Optional: admin-only features\n    ADMIN_TELEGRAM_USER_IDS: parseAdminIds(env.ADMIN_TELEGRAM_USER_IDS),\n\n    // Optional DB (keep behavior: bot runs without DB)\n    MONGODB_URI: String(env.MONGODB_URI || \"\"),\n\n    // Optional rate limit tuning\n    RATE_LIMIT_X_PER_MIN: toInt(env.RATE_LIMIT_X_PER_MIN, 6),\n    RATE_LIMIT_TIKTOK_PER_MIN: toInt(env.RATE_LIMIT_TIKTOK_PER_MIN, 6),\n\n    // Downloader gateway (optional)\n    MEDIA_DOWNLOAD_ENDPOINT: String(env.MEDIA_DOWNLOAD_ENDPOINT || \"\"),\n    MEDIA_DOWNLOAD_KEY: String(env.MEDIA_DOWNLOAD_KEY || \"\"),\n\n    // Network tuning\n    HTTP_TIMEOUT_MS: toInt(env.HTTP_TIMEOUT_MS, 20_000),\n    HTTP_MAX_REDIRECTS: toInt(env.HTTP_MAX_REDIRECTS, 5),\n    HTTP_RETRIES: toInt(env.HTTP_RETRIES, 2),\n    MAX_MEDIA_BYTES: toInt(env.MAX_MEDIA_BYTES, 45 * 1024 * 1024),\n    HTTP_USER_AGENT: String(env.HTTP_USER_AGENT || \"\"),\n\n    // AI gateway (optional; do not crash if missing)\n    COOKMYBOTS_AI_ENDPOINT: String(env.COOKMYBOTS_AI_ENDPOINT || \"\"),\n    COOKMYBOTS_AI_KEY: String(env.COOKMYBOTS_AI_KEY || \"\"),\n    AI_TIMEOUT_MS: toInt(env.AI_TIMEOUT_MS, 600_000),\n    AI_MAX_RETRIES: toInt(env.AI_MAX_RETRIES, 2),\n\n    // Logs / Heartbeat\n    HEARTBEAT_MS: toInt(env.HEARTBEAT_MS, 60_000),\n\n    // RapidAPI (optional; used by downloader fallback)\n    RAPIDAPI_KEY: String(env.RAPIDAPI_KEY || \"\"),\n  };\n\n  cfg.AI_ENABLED = Boolean(cfg.COOKMYBOTS_AI_ENDPOINT) && Boolean(cfg.COOKMYBOTS_AI_KEY);\n  cfg.WEBHOOK_ENABLED = Boolean(cfg.TELEGRAM_WEBHOOK_URL);\n\n  return cfg;\n}\n\nexport const cfg = getConfig(process.env);\n\nexport function assertRequiredConfig(cfgToCheck) {\n  if (!cfgToCheck?.TELEGRAM_BOT_TOKEN) {\n    console.error(\"[boot] missing required env var\", {\n      key: \"TELEGRAM_BOT_TOKEN\",\n      howToFix: \"Set TELEGRAM_BOT_TOKEN in your hosting dashboard environment variables, then redeploy.\",\n    });\n    process.exit(1);\n  }\n}\n"
                   },
                   "db.js": {
                     "type": "file",
                     "content": "\n      import { MongoClient } from \"mongodb\";\n\nlet _client = null;\nlet _db = null;\n\nexport async function getDb(mongoUri) {\n  if (!mongoUri) return null;\n  if (_db) return _db;\n\n  _client = new MongoClient(mongoUri, { maxPoolSize: 5 });\n  await _client.connect();\n  _db = _client.db(); // default DB from URI\n  return _db;\n}"
+                  },
+                  "env.js": {
+                    "type": "file",
+                    "content": "import fs from \"node:fs\";\nimport path from \"node:path\";\nimport { fileURLToPath } from \"node:url\";\nimport dotenv from \"dotenv\";\n\nlet loaded = false;\n\nexport function loadEnvBestEffort() {\n  if (loaded) return { attempted: true, loaded: false, path: \"\" };\n  loaded = true;\n\n  // Best-effort only. In hosting, .env typically doesn't exist.\n  const cwdPath = path.resolve(process.cwd(), \".env\");\n\n  let usedPath = \"\";\n  let didLoad = false;\n\n  try {\n    if (fs.existsSync(cwdPath)) {\n      const r = dotenv.config({ path: cwdPath });\n      if (!r.error) {\n        usedPath = cwdPath;\n        didLoad = true;\n      }\n    }\n  } catch {\n    // ignore\n  }\n\n  // Also try alongside src/ for some local layouts\n  if (!didLoad) {\n    try {\n      const here = path.dirname(fileURLToPath(import.meta.url));\n      const repoRootGuess = path.resolve(here, \"../../\");\n      const altPath = path.resolve(repoRootGuess, \".env\");\n      if (fs.existsSync(altPath)) {\n        const r = dotenv.config({ path: altPath });\n        if (!r.error) {\n          usedPath = altPath;\n          didLoad = true;\n        }\n      }\n    } catch {\n      // ignore\n    }\n  }\n\n  if (didLoad) {\n    console.log(\"[env] loaded .env\", { path: usedPath });\n  } else {\n    console.log(\"[env] no .env loaded\", { note: \"ok in production; use dashboard env vars\" });\n  }\n\n  return { attempted: true, loaded: didLoad, path: usedPath };\n}\n"
                   },
                   "http.js": {
                     "type": "file",
@@ -1201,7 +1210,7 @@
                 "children": {
                   "downloader.js": {
                     "type": "file",
-                    "content": "import { safeErr } from \"../lib/safeErr.js\";\nimport { resolveRedirects } from \"../lib/http.js\";\nimport { resolveTikTokMedia } from \"./tiktok.js\";\nimport { resolveXMedia } from \"./x.js\";\n\nfunction detect(url) {\n  try {\n    const u = new URL(url);\n    const h = u.hostname.toLowerCase();\n    if (h === \"tiktok.com\" || h.endsWith(\".tiktok.com\") || h === \"vm.tiktok.com\") return \"tiktok\";\n    if (h === \"x.com\" || h.endsWith(\".x.com\") || h === \"twitter.com\" || h.endsWith(\".twitter.com\") || h === \"t.co\") return \"x\";\n    return \"\";\n  } catch {\n    return \"\";\n  }\n}\n\nexport async function downloadFromUrl(inputUrl, { platformHint = \"\", status = async () => {}, trace = {} } = {}) {\n  const originalUrl = String(inputUrl || \"\");\n\n  console.log(\"[downloader] start\", {\n    traceId: trace.traceId || \"\",\n    platformHint: platformHint || \"\",\n    originalUrl,\n  });\n\n  await status(\"Resolving redirects…\");\n  const normalizedUrl = await resolveRedirects(originalUrl);\n\n  const platform = platformHint || detect(normalizedUrl) || detect(originalUrl);\n  if (!platform) {\n    const e = new Error(\"UNSUPPORTED_URL\");\n    e.code = \"UNSUPPORTED_URL\";\n    console.warn(\"[downloader] unsupported\", {\n      traceId: trace.traceId || \"\",\n      originalUrl,\n      normalizedUrl,\n    });\n    throw e;\n  }\n\n  console.log(\"[downloader] detected\", {\n    traceId: trace.traceId || \"\",\n    platform,\n    originalUrl,\n    normalizedUrl,\n  });\n\n  try {\n    await status(\"Extracting media…\");\n    let result;\n\n    if (platform === \"tiktok\") {\n      result = await resolveTikTokMedia(normalizedUrl);\n    } else if (platform === \"x\") {\n      result = await resolveXMedia(normalizedUrl);\n    } else {\n      const e = new Error(\"UNSUPPORTED_URL\");\n      e.code = \"UNSUPPORTED_URL\";\n      throw e;\n    }\n\n    console.log(\"[downloader] resolve ok\", {\n      traceId: trace.traceId || \"\",\n      platform,\n      kind: result?.kind || \"\",\n      itemCount: Array.isArray(result?.items) ? result.items.length : 0,\n    });\n\n    return result;\n  } catch (e) {\n    const msg = safeErr(e);\n    console.error(\"[downloader] resolve failed\", {\n      traceId: trace.traceId || \"\",\n      platform,\n      normalizedUrl,\n      err: msg,\n    });\n    throw e;\n  }\n}\n"
+                    "content": "import { resolveTikTokMedia } from \"../services/tiktok.js\";\nimport { safeErr } from \"../lib/safeErr.js\";\nimport fetch from \"node-fetch\"; // pastikan node >=18, kalau node lama bisa pakai node-fetch\n\n// --- definisi API23 di sini supaya tidak perlu file baru ---\nasync function resolveTikTokViaAPI23(videoUrl) {\n  const RAPID_KEY = process.env.RAPIDAPI_KEY;\n  if (!RAPID_KEY) throw new Error(\"RapidAPI key missing\");\n\n  const RAPID_HOST = \"tiktok-video-downloader-api.p.rapidapi.com\";\n  const endpoint = `https://${RAPID_HOST}/media?videoUrl=${encodeURIComponent(videoUrl)}`;\n\n  const res = await fetch(endpoint, {\n    method: \"GET\",\n    headers: {\n      \"x-rapidapi-key\": RAPID_KEY,\n      \"x-rapidapi-host\": RAPID_HOST,\n    },\n  });\n\n  if (!res.ok) throw new Error(`RapidAPI request failed: ${res.status}`);\n\n  const data = await res.json();\n  if (!data || !data.result) throw new Error(\"Invalid API23 response\");\n\n  return {\n    kind: \"video\",\n    items: [\n      { type: \"video\", url: data.result.play || data.result.download },\n    ],\n  };\n}\n\n// Contoh fungsi downloadFromUrl\nexport async function downloadFromUrl(url, { platformHint, status, trace }) {\n  const normalizedUrl = String(url || \"\");\n  const platform = platformHint;\n\n  if (platform === \"tiktok\") {\n    try {\n      await status?.(\"Downloading via API23…\");\n\n      let result;\n      try {\n        // Pakai API23 dulu\n        result = await resolveTikTokViaAPI23(normalizedUrl);\n      } catch (e) {\n        console.warn(\"[downloader] API23 failed, fallback to scrapper\", { err: safeErr(e) });\n        result = await resolveTikTokMedia(normalizedUrl);\n      }\n\n      console.log(\"[downloader] resolve ok\", {\n        traceId: trace?.traceId || \"\",\n        platform,\n        kind: result.kind,\n        itemCount: result.items.length,\n      });\n\n      return result;\n    } catch (e) {\n      const msg = safeErr(e);\n      console.error(\"[downloader] resolve failed\", {\n        traceId: trace?.traceId || \"\",\n        platform,\n        normalizedUrl,\n        err: msg,\n      });\n      throw e;\n    }\n  }\n\n  throw new Error(\"UNSUPPORTED_PLATFORM\");\n}"
                   },
                   "telegramSender.js": {
                     "type": "file",
@@ -1209,7 +1218,7 @@
                   },
                   "tiktok.js": {
                     "type": "file",
-                    "content": "import { fetchWithRetries } from \"../lib/http.js\";\n\nfunction extractJsonFromHtml(html) {\n  const s = String(html || \"\");\n\n  // Try SIGI_STATE (common)\n  const sigi = s.match(/<script[^>]*id=\"SIGI_STATE\"[^>]*>([\\s\\S]*?)<\\/script>/i);\n  if (sigi && sigi[1]) {\n    try {\n      return JSON.parse(sigi[1]);\n    } catch {}\n  }\n\n  // Try __UNIVERSAL_DATA_FOR_REHYDRATION__\n  const uni = s.match(/<script[^>]*id=\"__UNIVERSAL_DATA_FOR_REHYDRATION__\"[^>]*>([\\s\\S]*?)<\\/script>/i);\n  if (uni && uni[1]) {\n    try {\n      return JSON.parse(uni[1]);\n    } catch {}\n  }\n\n  return null;\n}\n\nfunction pickBestVideoUrl(obj) {\n  // Heuristics over known TikTok shapes\n  // Return a direct mp4 URL if available.\n  const candidates = [];\n\n  try {\n    const itemModule = obj?.ItemModule || obj?.itemModule;\n    if (itemModule && typeof itemModule === \"object\") {\n      const firstKey = Object.keys(itemModule)[0];\n      const item = itemModule[firstKey];\n      const play = item?.video?.playAddr;\n      const download = item?.video?.downloadAddr;\n      const bitRates = item?.video?.bitrateInfo;\n      if (Array.isArray(bitRates)) {\n        for (const b of bitRates) {\n          const u = b?.PlayAddr?.UrlList?.[0] || b?.PlayAddr?.UrlList?.[1];\n          if (u) candidates.push(String(u));\n        }\n      }\n      if (play) candidates.push(String(play));\n      if (download) candidates.push(String(download));\n\n      const images = item?.imagePost?.images;\n      if (Array.isArray(images) && images.length) {\n        const imageUrls = images\n          .map((im) => im?.imageURL?.urlList?.[0] || im?.imageURL?.urlList?.[1])\n          .filter(Boolean)\n          .map(String);\n        if (imageUrls.length) {\n          return { type: \"images\", urls: imageUrls };\n        }\n      }\n    }\n  } catch {}\n\n  const uniq = Array.from(new Set(candidates.filter(Boolean)));\n  if (uniq.length) return { type: \"video\", urls: uniq };\n  return null;\n}\n\nexport async function resolveTikTokMedia(url) {\n  const u = String(url || \"\");\n\n  const res = await fetchWithRetries(u, {\n    method: \"GET\",\n    headers: {\n      Accept: \"text/html,application/xhtml+xml\",\n    },\n  });\n\n  if (!res.ok) {\n    if (res.status === 401 || res.status === 403 || res.status === 404) {\n      const e = new Error(\"Public content only\");\n      e.code = \"PUBLIC_ONLY\";\n      throw e;\n    }\n    throw new Error(`TIKTOK_HTTP_${res.status}`);\n  }\n\n  const html = await res.text();\n  const json = extractJsonFromHtml(html);\n  if (!json) {\n    // TikTok may block scraping or require JS; treat as public-only restriction.\n    const e = new Error(\"Public content only\");\n    e.code = \"PUBLIC_ONLY\";\n    throw e;\n  }\n\n  const picked = pickBestVideoUrl(json);\n  if (!picked) {\n    const e = new Error(\"Public content only\");\n    e.code = \"PUBLIC_ONLY\";\n    throw e;\n  }\n\n  if (picked.type === \"images\") {\n    return {\n      platform: \"tiktok\",\n      kind: \"images\",\n      items: picked.urls.map((x) => ({ url: x, mime: \"image/jpeg\" })),\n    };\n  }\n\n  return {\n    platform: \"tiktok\",\n    kind: \"video\",\n    items: [{ url: picked.urls[0], mime: \"video/mp4\" }],\n  };\n}\n"
+                    "content": "export async function resolveTikTokMedia(url) {\n  const u = String(url || \"\").trim();\n  if (!u) {\n    const e = new Error(\"Invalid URL\");\n    e.code = \"INVALID_URL\";\n    throw e;\n  }\n\n  const endpoint = `https://www.tikwm.com/api/?url=${encodeURIComponent(u)}`;\n\n  console.log(\"[tikwm] request\", endpoint);\n\n  let res;\n  try {\n    res = await fetch(endpoint, {\n      method: \"GET\",\n      headers: {\n        \"User-Agent\":\n          \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36\",\n        Accept: \"application/json\",\n      },\n    });\n  } catch (err) {\n    console.error(\"[tikwm] network error\", err?.message || err);\n    throw new Error(\"TikWM network failed\");\n  }\n\n  if (!res.ok) {\n    console.error(\"[tikwm] http error\", res.status);\n    throw new Error(`TIKWM_HTTP_${res.status}`);\n  }\n\n  let json;\n  try {\n    json = await res.json();\n  } catch {\n    throw new Error(\"Invalid TikWM response\");\n  }\n\n  console.log(\"[tikwm] response\", {\n    code: json?.code,\n    hasData: Boolean(json?.data),\n  });\n\n  if (!json?.data) {\n    const e = new Error(\"Public content only\");\n    e.code = \"PUBLIC_ONLY\";\n    throw e;\n  }\n\n  const videoUrl =\n    json?.data?.play ||\n    json?.data?.wmplay ||\n    json?.data?.hdplay ||\n    \"\";\n\n  if (!videoUrl) {\n    const e = new Error(\"Video not found\");\n    e.code = \"VIDEO_NOT_FOUND\";\n    throw e;\n  }\n\n  return {\n    platform: \"tiktok\",\n    kind: \"video\",\n    items: [{ url: videoUrl, mime: \"video/mp4\" }],\n  };\n}"
                   },
                   "x.js": {
                     "type": "file",
@@ -1223,42 +1232,42 @@
         "commands": [
           {
             "command": "/health",
-            "description": "Admin-only diagnostics: update mode, DB connectivity, AI enabled bool, uptime, and last error summary.",
+            "description": "Admin-only diagnostics for update mode, DB connectivity, AI enabled boolean, uptime, and last error summary.",
             "usage": "/health",
             "examples": [
-              "Admin: /health → Bot: Shows polling/webhook mode and last error summary"
+              "Admin: /health → Bot: Shows polling mode and DB connected boolean"
             ],
-            "example": "Admin: /health → Bot: Shows polling/webhook mode and last error summary",
-            "notes": "Only available when ADMIN_TELEGRAM_USER_IDS is set and the user is listed."
+            "example": "Admin: /health → Bot: Shows polling mode and DB connected boolean",
+            "notes": "Unchanged behavior. If ADMIN_TELEGRAM_USER_IDS is not set, this command stays effectively unavailable."
           },
           {
             "command": "/help",
-            "description": "Shows supported sources, public-only limitation, common failure reasons, and a privacy note.",
+            "description": "Explains supported links, public-only limitations, and troubleshooting tips.",
             "usage": "/help",
             "examples": [
-              "User: /help → Bot: Explains what links work and why a download might fail"
+              "User: /help → Bot: Shows how to use the bot"
             ],
-            "example": "User: /help → Bot: Explains what links work and why a download might fail",
-            "notes": "Unchanged."
+            "example": "User: /help → Bot: Shows how to use the bot",
+            "notes": "Unchanged user-facing content; now uses centralized config safely."
           },
           {
             "command": "/start",
-            "description": "Welcome message plus examples of TikTok and X links you can paste.",
+            "description": "Welcome message and examples of TikTok and X links you can paste.",
             "usage": "/start",
             "examples": [
-              "User: /start → Bot: Shows examples of TikTok and X links"
+              "User: /start → Bot: Shows example links"
             ],
-            "example": "User: /start → Bot: Shows examples of TikTok and X links",
-            "notes": "Unchanged."
+            "example": "User: /start → Bot: Shows example links",
+            "notes": "Unchanged behavior."
           }
         ],
         "envVarDocs": [
           {
             "key": "TELEGRAM_BOT_TOKEN",
             "title": "Telegram Bot Token",
-            "description": "Token from BotFather used to connect to Telegram.",
-            "usage": "Required at startup. The bot exits with a clear message if missing.",
-            "howToGet": "Create a bot with @BotFather and copy the token.",
+            "description": "Telegram bot token from BotFather. Required to start.",
+            "usage": "Read at boot from environment variables; process exits with a clear log message if missing.",
+            "howToGet": "Create a bot using @BotFather and copy the token.",
             "example": "123456789:AA... (format only)",
             "isSecret": true,
             "required": true
@@ -1305,30 +1314,30 @@
           },
           {
             "key": "MONGODB_URI",
-            "title": "MongoDB Connection String",
-            "description": "MongoDB connection string for optional persistence (memory/logs). If missing, the bot still runs.",
-            "usage": "Used at boot to connect; failures are logged but do not block /start and /help.",
-            "howToGet": "Create a MongoDB database (Atlas or your provider) and copy the connection string.",
-            "example": "mongodb+srv://user:pass@cluster.example.mongodb.net/dbname",
+            "title": "MongoDB Connection URI",
+            "description": "Optional database connection string for persistence and memory features (if used).",
+            "usage": "If set, the bot attempts to connect on boot; if missing, DB is disabled with a warning log.",
+            "howToGet": "Create a MongoDB database and copy the connection string URI.",
+            "example": "mongodb+srv://user:pass@cluster0.example.mongodb.net/db",
             "isSecret": true,
             "required": false
           },
           {
             "key": "COOKMYBOTS_AI_ENDPOINT",
-            "title": "CookMyBots AI Endpoint",
-            "description": "Base URL for CookMyBots AI Gateway. Only used if the bot uses AI features.",
-            "usage": "Logged at startup (presence only).",
-            "howToGet": "From CookMyBots project settings.",
+            "title": "CookMyBots AI Gateway Endpoint",
+            "description": "Base URL for the CookMyBots AI Gateway.",
+            "usage": "AI features are enabled only if both COOKMYBOTS_AI_ENDPOINT and COOKMYBOTS_AI_KEY are set.",
+            "howToGet": "Provided by CookMyBots.",
             "example": "https://api.cookmybots.com/api/ai",
             "isSecret": false,
             "required": false
           },
           {
             "key": "COOKMYBOTS_AI_KEY",
-            "title": "CookMyBots AI Key",
-            "description": "Secret key for CookMyBots AI Gateway. Only used if the bot uses AI features.",
-            "usage": "Logged at startup (presence only).",
-            "howToGet": "From CookMyBots project settings.",
+            "title": "CookMyBots AI Gateway Key",
+            "description": "Secret key for CookMyBots AI Gateway authentication.",
+            "usage": "AI features are enabled only if both COOKMYBOTS_AI_ENDPOINT and COOKMYBOTS_AI_KEY are set.",
+            "howToGet": "Provided by CookMyBots.",
             "example": "cmb_ai_... (format only)",
             "isSecret": true,
             "required": false
@@ -1336,10 +1345,10 @@
           {
             "key": "ADMIN_TELEGRAM_USER_IDS",
             "title": "Admin Telegram User IDs",
-            "description": "Comma-separated Telegram numeric user IDs allowed to use /health.",
-            "usage": "Parsed on boot; if empty, /health is effectively unavailable.",
-            "howToGet": "Get your Telegram numeric ID (e.g. from @userinfobot).",
-            "example": "123456789,987654321",
+            "description": "Comma-separated Telegram user IDs allowed to use admin-only diagnostics like /health.",
+            "usage": "If unset or empty, admin features stay disabled.",
+            "howToGet": "Send a message to the bot and check your Telegram numeric user ID (or use another bot that tells you).",
+            "example": "12345678,87654321",
             "isSecret": false,
             "required": false
           },
@@ -1356,10 +1365,10 @@
           {
             "key": "PORT",
             "title": "HTTP Port",
-            "description": "Port for the optional HTTP server used when considering webhook mode. Not required for polling.",
-            "usage": "If set, the bot starts a tiny server that responds 'ok'.",
-            "howToGet": "Provided by your hosting platform (Render sets PORT automatically).",
-            "example": "10000",
+            "description": "Port for the optional HTTP server used for hosting platforms that require a listening port.",
+            "usage": "Defaults to 3000 when not set.",
+            "howToGet": "Hosting platform sets this automatically, or you can set it.",
+            "example": "3000",
             "isSecret": false,
             "required": false
           },
@@ -1372,35 +1381,45 @@
             "example": "60000",
             "isSecret": false,
             "required": false
+          },
+          {
+            "key": "NODE_ENV",
+            "title": "Node Environment",
+            "description": "Runtime environment name.",
+            "usage": "Defaults to development when not set.",
+            "howToGet": "Set to production on hosting if desired.",
+            "example": "production",
+            "isSecret": false,
+            "required": false
           }
         ],
         "commandDocs": [
           {
             "command": "/start",
-            "description": "Welcome message plus examples of TikTok and X links you can paste.",
+            "description": "Welcome message and examples of TikTok and X links you can paste.",
             "usage": "/start",
             "examples": [
-              "User: /start → Bot: Shows examples of TikTok and X links"
+              "User: /start → Bot: Shows example links"
             ],
-            "notes": "Unchanged."
+            "notes": "Unchanged behavior."
           },
           {
             "command": "/help",
-            "description": "Shows supported sources, public-only limitation, common failure reasons, and a privacy note.",
+            "description": "Explains supported links, public-only limitations, and troubleshooting tips.",
             "usage": "/help",
             "examples": [
-              "User: /help → Bot: Explains what links work and why a download might fail"
+              "User: /help → Bot: Shows how to use the bot"
             ],
-            "notes": "Unchanged."
+            "notes": "Unchanged user-facing content; now uses centralized config safely."
           },
           {
             "command": "/health",
-            "description": "Admin-only diagnostics: update mode, DB connectivity, AI enabled bool, uptime, and last error summary.",
+            "description": "Admin-only diagnostics for update mode, DB connectivity, AI enabled boolean, uptime, and last error summary.",
             "usage": "/health",
             "examples": [
-              "Admin: /health → Bot: Shows polling/webhook mode and last error summary"
+              "Admin: /health → Bot: Shows polling mode and DB connected boolean"
             ],
-            "notes": "Only available when ADMIN_TELEGRAM_USER_IDS is set and the user is listed."
+            "notes": "Unchanged behavior. If ADMIN_TELEGRAM_USER_IDS is not set, this command stays effectively unavailable."
           }
         ],
         "aiMessages": [
@@ -1437,6 +1456,16 @@
             "content": "Implemented robust Telegram boot + polling reliability with @grammyjs/runner (concurrency 1), added a startup banner with env sanity (no secrets), clear webhook-vs-polling fallback behavior, 409 Conflict remediation (deleteWebhook + backoff), periodic polling/heartbeat logs, and a global error boundary. Added structured diagnostics throughout the downloader + Telegram sending pipeline, plus stronger media send fallbacks (video→document→source URL). Added an admin-only /health command gated by ADMIN_TELEGRAM_USER_IDS. Updated .env.sample and appended troubleshooting sections to README/DOCS.\n\nFiles touched (10): .env.sample, DOCS.md, README.md, package.json, src/bot.js, src/commands/health.js…\nValidation: ✅ project passes syntax/basic checks after this edit.",
             "gitBeforeSha": "0eee01457c4d585f2c54461fe12591ab70514307",
             "gitAfterSha": "652c8c409e6cd900b186d089cbd581894f5d4c66"
+          },
+          {
+            "role": "user",
+            "content": "i update some files codes and ran it locally it work perfectly ,but on this web it doesnt start because the bot cant read .env files ,help me to analize and then help me to fix this problem"
+          },
+          {
+            "role": "assistant",
+            "content": "Implemented deployment-safe env loading and startup diagnostics without changing the bot’s user-facing commands/behavior. The bot now best-effort loads .env locally via dotenv (won’t crash if missing), centralizes all env reads with safe defaults in src/lib/config.js, prints a single structured startup summary (booleans only, no secrets), and exits with a clear message only when TELEGRAM_BOT_TOKEN is missing. Updated README.md and DOCS.md with a deployment env vars section and a debug checklist.\n\nFiles touched (8): .env.sample, DOCS.md, README.md, package.json, src/commands/help.js, src/index.js…\nValidation: ✅ project passes syntax/basic checks after this edit.",
+            "gitBeforeSha": "e5545dd675c4994c42df5b2aad19ed7167b37a82",
+            "gitAfterSha": "f3c0ff9d96f642e46a68db8c9ad05eda3d9a3b97"
           }
         ],
         "createdBy": "",
@@ -1454,28 +1483,28 @@
         "balanceCentsRemaining": 0,
         "billing": {
           "ok": true,
-          "charged": 61,
+          "charged": 57,
           "remaining": 0,
-          "chargedCents": 61,
+          "chargedCents": 57,
           "remainingCents": 0,
           "currency": "USD",
-          "baseUsd": 0.30567,
-          "markupUsd": 0.30567,
+          "baseUsd": 0.28298599999999996,
+          "markupUsd": 0.28298599999999996,
           "platformFeeUsd": 0,
-          "totalUsd": 0.61134
+          "totalUsd": 0.5659719999999999
         },
         "title": "Telegram - Media Downloader"
       }
     }
   },
   "runStatus": {
-    "phase": "reindex",
+    "phase": "done",
     "stage": "chat",
     "runId": "d77fb276-6a70-4a9b-b0c5-223a6a0ce63e:mm8b03oz:zpedao",
     "lastUserMessage": "i update some files codes and ran it locally it work perfectly ,but on this web it doesnt start because the bot cant read .env files ,help me to analize and then help me to fix this problem",
     "startedAt": "2026-03-01T16:06:09.929Z",
-    "updatedAt": "2026-03-01T22:11:47.080Z",
-    "message": "Syncing environment template with used env variables…",
+    "updatedAt": "2026-03-01T22:11:48.617Z",
+    "message": "GitHub auto-push done: f3c0ff9",
     "commands": [
       {
         "name": "health",
@@ -1496,7 +1525,7 @@
       "fileStructure": {
         ".env.sample": {
           "type": "file",
-          "content": "# Required\nTELEGRAM_BOT_TOKEN=\n\n# Optional (recommended)\nMONGODB_URI=\n\n# Optional admin diagnostics\n# Comma-separated Telegram user IDs. If not set, /health is unavailable.\nADMIN_TELEGRAM_USER_IDS=\n\n# Optional webhook configuration (polling is the default)\n# If TELEGRAM_WEBHOOK_URL is set but PORT is not listening, the bot will fall back to polling.\nTELEGRAM_WEBHOOK_URL=\nPORT=\n\n# Optional AI gateway (only used if some feature calls it)\nCOOKMYBOTS_AI_ENDPOINT=\nCOOKMYBOTS_AI_KEY=\nAI_TIMEOUT_MS=600000\nAI_MAX_RETRIES=2\n\n# Optional tuning\nRATE_LIMIT_X_PER_MIN=6\nRATE_LIMIT_TIKTOK_PER_MIN=6\nHTTP_TIMEOUT_MS=20000\nHTTP_RETRIES=2\nHTTP_MAX_REDIRECTS=5\nMAX_MEDIA_BYTES=47185920\n\n# Optional logs\nHEARTBEAT_MS=60000\n\n# Auto-synced env keys detected from process.env usage:\nHTTP_USER_AGENT=\nMEDIA_DOWNLOAD_ENDPOINT=\nMEDIA_DOWNLOAD_KEY=\n\n"
+          "content": "# Required environment variables\nNODE_ENV=production\nTELEGRAM_BOT_TOKEN=\n\n# Auto-synced env keys detected from process.env usage:\nHTTP_USER_AGENT=\nRAPIDAPI_KEY=\nRATE_LIMIT_TIKTOK_PER_MIN=\nRATE_LIMIT_X_PER_MIN=\n\n"
         },
         ".render.json": {
           "type": "file",
@@ -1504,15 +1533,15 @@
         },
         "CHANGELOG.md": {
           "type": "file",
-          "content": "# Changelog\n\nAll notable changes to this bot project are recorded here.\n\n## 2026-03-01 17:42:25. UTC\n- Request: the bot wont connect or response on telegram ,help me to fix it\n- Summary: Implemented robust Telegram boot + polling reliability with @grammyjs/runner (concurrency 1), added a startup banner with env sanity (no secrets), clear webhook-vs-polling fallback behavior, 409 Conflict remediation (de…\n- Files: .env.sample, DOCS.md, README.md, package.json, src/bot.js, src/commands/health.js, src/index.js, src/lib/runtime.js, src/services/downloader.js, src/services/telegramSender.js\n\n## 2026-03-01 16:29:37. UTC\n- Request: fix installation problem by change the package.json line to this { \"name\": \"cookmybots-telegram-bot\", \"version\": \"0.1.0\", \"private\": true, \"type\": \"module\", \"engines\": { \"node\": \">=18\" }, \"scripts\": { \"install:root\": \"b…\n- Summary: Replaced root package.json to match your provided JSON exactly (scripts, deps, engines, type: module). Updated README.md and DOCS.md to instruct npm run build, npm start, and npm run dev; added Node >=18 requirement; an…\n- Files: .env.sample, DOCS.md, README.md, package.json\n\n## 2026-03-01 16:27:55. UTC\n- Request: change the package.json to this { \"name\": \"cookmybots-telegram-bot\", \"version\": \"0.1.0\", \"private\": true, \"type\": \"module\", \"engines\": { \"node\": \">=18\" }, \"scripts\": { \"install:root\": \"bash -lc \\\"set -e; if [ -f package…\n- Summary: Updated package.json exactly as provided (including start/dev using node --env-file=.env) and removed the import \"dotenv/config\" line from src/index.js. No other behavior or logic was changed.\n- Files: .env.sample, package.json, src/index.js\n\n## 2026-03-01 16:08:08. UTC\n- Request: create a simple bot to download media from tiktok and x ,when user paste the link of the media the bot will download and send the media to the chat ,only public media can be downloaded\n- Summary: Created a Telegram-only grammY bot that detects the first TikTok or X link in a message, posts a progress status message, downloads public media, and sends it back with Telegram-safe fallbacks (video→document, images→me…\n- Files: .env.sample, DOCS.md, README.md, package.json, src/bot.js, src/commands/help.js, src/commands/loader.js, src/commands/start.js, src/index.js, src/lib/config.js, src/lib/http.js, src/lib/rateLimit.js, src/lib/safeErr.js, src/lib/urls.js (+4 more)\n\n"
+          "content": "# Changelog\n\nAll notable changes to this bot project are recorded here.\n\n## 2026-03-01 22:11:46. UTC\n- Request: i update some files codes and ran it locally it work perfectly ,but on this web it doesnt start because the bot cant read .env files ,help me to analize and then help me to fix this problem\n- Summary: Implemented deployment-safe env loading and startup diagnostics without changing the bot’s user-facing commands/behavior. The bot now best-effort loads .env locally via dotenv (won’t crash if missing), centralizes all e…\n- Files: .env.sample, DOCS.md, README.md, package.json, src/commands/help.js, src/index.js, src/lib/config.js, src/lib/env.js\n\n## 2026-03-01 17:42:25. UTC\n- Request: the bot wont connect or response on telegram ,help me to fix it\n- Summary: Implemented robust Telegram boot + polling reliability with @grammyjs/runner (concurrency 1), added a startup banner with env sanity (no secrets), clear webhook-vs-polling fallback behavior, 409 Conflict remediation (de…\n- Files: .env.sample, DOCS.md, README.md, package.json, src/bot.js, src/commands/health.js, src/index.js, src/lib/runtime.js, src/services/downloader.js, src/services/telegramSender.js\n\n## 2026-03-01 16:29:37. UTC\n- Request: fix installation problem by change the package.json line to this { \"name\": \"cookmybots-telegram-bot\", \"version\": \"0.1.0\", \"private\": true, \"type\": \"module\", \"engines\": { \"node\": \">=18\" }, \"scripts\": { \"install:root\": \"b…\n- Summary: Replaced root package.json to match your provided JSON exactly (scripts, deps, engines, type: module). Updated README.md and DOCS.md to instruct npm run build, npm start, and npm run dev; added Node >=18 requirement; an…\n- Files: .env.sample, DOCS.md, README.md, package.json\n\n## 2026-03-01 16:27:55. UTC\n- Request: change the package.json to this { \"name\": \"cookmybots-telegram-bot\", \"version\": \"0.1.0\", \"private\": true, \"type\": \"module\", \"engines\": { \"node\": \">=18\" }, \"scripts\": { \"install:root\": \"bash -lc \\\"set -e; if [ -f package…\n- Summary: Updated package.json exactly as provided (including start/dev using node --env-file=.env) and removed the import \"dotenv/config\" line from src/index.js. No other behavior or logic was changed.\n- Files: .env.sample, package.json, src/index.js\n\n## 2026-03-01 16:08:08. UTC\n- Request: create a simple bot to download media from tiktok and x ,when user paste the link of the media the bot will download and send the media to the chat ,only public media can be downloaded\n- Summary: Created a Telegram-only grammY bot that detects the first TikTok or X link in a message, posts a progress status message, downloads public media, and sends it back with Telegram-safe fallbacks (video→document, images→me…\n- Files: .env.sample, DOCS.md, README.md, package.json, src/bot.js, src/commands/help.js, src/commands/loader.js, src/commands/start.js, src/index.js, src/lib/config.js, src/lib/http.js, src/lib/rateLimit.js, src/lib/safeErr.js, src/lib/urls.js (+4 more)\n\n"
         },
         "DOCS.md": {
           "type": "file",
-          "content": "\nBot not responding troubleshooting\n1) Check TELEGRAM_BOT_TOKEN is set in your environment.\n2) If you see 409 Conflict in logs, another instance may be running or a webhook is set. Stop other instances, or clear webhook, then restart.\n3) This bot prefers polling (getUpdates). If you set TELEGRAM_WEBHOOK_URL without a working PORT listener, it will log a warning and still use polling.\n4) Check logs for [polling] starting and [polling] alive lines. If missing, the process may not be starting.\n5) If MongoDB connection fails, the bot should still respond to /start and /help; check [db] connect failed logs for details.\n"
+          "content": "\n\nDeployment env vars\nHosting environments usually do not provide a .env file at runtime. This bot will try to load a local .env if it exists, but in production you must set environment variables in your hosting dashboard.\n\nEnvironment variable mapping\nSet these keys in your host dashboard exactly as written:\n\n1) TELEGRAM_BOT_TOKEN\nRequired. Telegram token from BotFather.\n\n2) MONGODB_URI\nOptional. If not set, the bot will run with DB features disabled.\n\n3) ADMIN_TELEGRAM_USER_IDS\nOptional. Comma-separated Telegram user IDs. If not set, the /health command is effectively unavailable.\n\n4) COOKMYBOTS_AI_ENDPOINT\nOptional. Enables AI gateway calls only if COOKMYBOTS_AI_KEY is also set.\n\n5) COOKMYBOTS_AI_KEY\nOptional. Enables AI gateway calls only if COOKMYBOTS_AI_ENDPOINT is also set.\n\n6) PORT\nOptional. Defaults to 3000.\n\n7) NODE_ENV\nOptional. Defaults to development.\n\nDebug checklist\n1) Confirm TELEGRAM_BOT_TOKEN is set in the hosting dashboard.\n2) Redeploy after changing env vars.\n3) Check logs for the single [startup] env line. It shows which env vars are set using booleans only.\n4) If the bot exits immediately, the logs will say which required env var is missing.\n"
         },
         "README.md": {
           "type": "file",
-          "content": "\nBot not responding troubleshooting\n1) Verify TELEGRAM_BOT_TOKEN is set.\n2) Look for [tg] bot.init ok and [polling] starting in logs.\n3) If you see 409 Conflict, you likely have two deployments running at once or a webhook configured. The bot will back off and retry automatically.\n4) If you configured TELEGRAM_WEBHOOK_URL but did not expose PORT, the bot will fall back to polling.\n5) Use /health (admin-only) to see update mode, DB connectivity, and last error summary.\n"
+          "content": "\n\nDeployment env vars\nMost hosting platforms do not mount your local .env file into the running container. This bot will load .env only when it exists locally, but production must use real environment variables set in the host dashboard.\n\nEnv var mapping (copy keys exactly)\n1) TELEGRAM_BOT_TOKEN (required)\n2) MONGODB_URI (optional)\n3) ADMIN_TELEGRAM_USER_IDS (optional)\n4) COOKMYBOTS_AI_ENDPOINT (optional, requires COOKMYBOTS_AI_KEY)\n5) COOKMYBOTS_AI_KEY (optional, requires COOKMYBOTS_AI_ENDPOINT)\n6) PORT (optional, default 3000)\n7) NODE_ENV (optional, default development)\n\nDebug checklist\n1) Set TELEGRAM_BOT_TOKEN in the dashboard and redeploy.\n2) Open logs and look for [startup] env. It prints booleans only (no secrets).\n3) If you see missing TELEGRAM_BOT_TOKEN, the bot will exit with a clear message.\n"
         },
         "package.json": {
           "type": "file",
@@ -1548,7 +1577,7 @@
             },
             "index.js": {
               "type": "file",
-              "content": "import http from \"node:http\";\n\nimport { run } from \"@grammyjs/runner\";\nimport { cfg } from \"./lib/config.js\";\nimport { safeErr } from \"./lib/safeErr.js\";\nimport { getDb } from \"./lib/db.js\";\nimport { buildBot } from \"./bot.js\";\nimport { getLastError, parseAdminIds, setLastError } from \"./lib/runtime.js\";\n\nprocess.on(\"unhandledRejection\", (e) => {\n  console.error(\"[process] unhandledRejection\", { err: safeErr(e) });\n  process.exit(1);\n});\nprocess.on(\"uncaughtException\", (e) => {\n  console.error(\"[process] uncaughtException\", { err: safeErr(e) });\n  process.exit(1);\n});\n\nasync function sleep(ms) {\n  await new Promise((r) => setTimeout(r, ms));\n}\n\nlet pollRunner = null;\nlet restartLock = false;\n\nfunction startHeartbeat() {\n  const intervalMs = Number(process.env.HEARTBEAT_MS || 60_000);\n  if (!Number.isFinite(intervalMs) || intervalMs <= 0) return;\n\n  setInterval(() => {\n    const m = process.memoryUsage();\n    console.log(\"[heartbeat]\", {\n      uptimeS: Math.floor(process.uptime()),\n      rssMB: Math.round(m.rss / 1e6),\n      heapUsedMB: Math.round(m.heapUsed / 1e6),\n    });\n  }, intervalMs).unref();\n}\n\nasync function maybeStartWebhookServer() {\n  const port = Number(process.env.PORT || 0);\n  if (!port) return { server: null, listening: false, port: 0 };\n\n  const server = http.createServer((req, res) => {\n    // This project primarily uses long polling.\n    // If a webhook is configured in the future, this server can be extended to receive updates.\n    res.statusCode = 200;\n    res.setHeader(\"Content-Type\", \"text/plain\");\n    res.end(\"ok\");\n  });\n\n  await new Promise((resolve) => server.listen(port, resolve));\n  console.log(\"[http] listening\", { port });\n\n  return { server, listening: true, port };\n}\n\nasync function startPolling(bot, runtimeInfo) {\n  let backoffMs = 2000;\n\n  for (;;) {\n    try {\n      console.log(\"[polling] starting\", { concurrency: 1 });\n\n      // Use runner for stable long polling.\n      // Concurrency is kept at 1 to avoid runaway backlog/memory.\n      pollRunner = run(bot, { concurrency: 1 });\n\n      runtimeInfo.updateMode = \"polling\";\n\n      // Small periodic log so we can see it's alive even when idle\n      let lastLog = Date.now();\n      const tick = setInterval(() => {\n        const now = Date.now();\n        if (now - lastLog > 60_000) {\n          console.log(\"[polling] alive\");\n          lastLog = now;\n        }\n      }, 30_000);\n      tick.unref();\n\n      await pollRunner.task();\n\n      console.warn(\"[polling] runner stopped (will restart)\");\n    } catch (e) {\n      const msg = safeErr(e);\n      setLastError(e);\n      console.error(\"[polling] error\", { err: msg });\n\n      // Telegram conflict (another instance polling, or webhook set)\n      if (/409|Conflict/i.test(msg)) {\n        console.warn(\"[polling] conflict detected\", {\n          hint: \"Another instance may be running, or a webhook is set. Will backoff and retry.\",\n          backoffMs,\n        });\n\n        try {\n          // Safe remediation: clear webhook before polling\n          await bot.api.deleteWebhook({ drop_pending_updates: true });\n          console.log(\"[polling] deleteWebhook ok\");\n        } catch (e2) {\n          console.warn(\"[polling] deleteWebhook failed\", { err: safeErr(e2) });\n        }\n      }\n\n      await sleep(backoffMs);\n      backoffMs = Math.min(20_000, Math.round(backoffMs * 1.8));\n    } finally {\n      try {\n        pollRunner?.abort?.();\n      } catch {}\n      pollRunner = null;\n    }\n  }\n}\n\nasync function boot() {\n  const adminIds = parseAdminIds(process.env.ADMIN_TELEGRAM_USER_IDS);\n  const webhookUrl = String(process.env.TELEGRAM_WEBHOOK_URL || \"\").trim();\n\n  const runtimeInfo = {\n    updateMode: \"unknown\",\n    telegramTokenSet: Boolean(cfg.TELEGRAM_BOT_TOKEN),\n    dbConnected: false,\n    aiEnabled: Boolean(process.env.COOKMYBOTS_AI_ENDPOINT) && Boolean(process.env.COOKMYBOTS_AI_KEY),\n    lastError: \"\",\n  };\n\n  console.log(\"[boot]\", {\n    nodeEnv: process.env.NODE_ENV || \"\",\n    telegramTokenSet: Boolean(cfg.TELEGRAM_BOT_TOKEN),\n    mongodbUriSet: Boolean(process.env.MONGODB_URI),\n    cookmybotsAiEndpointSet: Boolean(process.env.COOKMYBOTS_AI_ENDPOINT),\n    cookmybotsAiKeySet: Boolean(process.env.COOKMYBOTS_AI_KEY),\n    webhookUrlSet: Boolean(webhookUrl),\n    portSet: Boolean(process.env.PORT),\n    adminIdsConfigured: adminIds.length > 0,\n  });\n\n  if (!cfg.TELEGRAM_BOT_TOKEN) {\n    console.error(\"TELEGRAM_BOT_TOKEN is required. Set it in your environment (or .env for local dev).\");\n    process.exit(1);\n  }\n\n  startHeartbeat();\n\n  // DB is optional; never block bot boot on DB issues.\n  if (process.env.MONGODB_URI) {\n    try {\n      const db = await getDb(process.env.MONGODB_URI);\n      runtimeInfo.dbConnected = Boolean(db);\n      console.log(\"[db] connect ok\", { connected: runtimeInfo.dbConnected });\n    } catch (e) {\n      setLastError(e);\n      console.warn(\"[db] connect failed\", { err: safeErr(e) });\n      runtimeInfo.dbConnected = false;\n    }\n  } else {\n    console.warn(\"[db] disabled (MONGODB_URI not set)\");\n  }\n\n  const { listening } = await maybeStartWebhookServer();\n\n  // Decide update mode.\n  // Prefer polling unless webhook is explicitly configured AND an HTTP port is listening.\n  const webhookReady = Boolean(webhookUrl) && Boolean(listening);\n\n  const bot = await buildBot({ token: cfg.TELEGRAM_BOT_TOKEN, runtimeInfo, adminIds });\n\n  // Ensure bot.init + set commands are not fatal\n  try {\n    await bot.init();\n    console.log(\"[tg] bot.init ok\", { username: bot.botInfo?.username || \"\" });\n  } catch (e) {\n    setLastError(e);\n    console.warn(\"[tg] bot.init failed (continuing)\", { err: safeErr(e) });\n  }\n\n  try {\n    await bot.api.setMyCommands([\n      { command: \"start\", description: \"Welcome and examples\" },\n      { command: \"help\", description: \"Supported links and troubleshooting\" },\n    ]);\n  } catch (e) {\n    setLastError(e);\n    console.warn(\"[tg] setMyCommands failed (continuing)\", { err: safeErr(e) });\n  }\n\n  if (!webhookReady) {\n    if (webhookUrl && !listening) {\n      console.warn(\"[webhook] TELEGRAM_WEBHOOK_URL is set but PORT is not listening; falling back to polling\");\n    } else {\n      console.log(\"[webhook] not configured; using polling\");\n    }\n\n    // Always clear webhook when polling to avoid conflicts\n    try {\n      await bot.api.deleteWebhook({ drop_pending_updates: true });\n      console.log(\"[tg] deleteWebhook ok\");\n    } catch (e) {\n      setLastError(e);\n      console.warn(\"[tg] deleteWebhook failed (continuing)\", { err: safeErr(e) });\n    }\n\n    // Keep runtimeInfo updated for /health\n    setInterval(() => {\n      runtimeInfo.lastError = getLastError();\n    }, 5000).unref();\n\n    await startPolling(bot, runtimeInfo);\n    return;\n  }\n\n  // Webhook mode placeholder: not enabled in this project by default.\n  // We log and then still fall back to polling so the bot always works.\n  console.warn(\"[webhook] webhook mode is not implemented in this bot. Falling back to polling.\");\n\n  try {\n    await bot.api.deleteWebhook({ drop_pending_updates: true });\n  } catch {}\n\n  setInterval(() => {\n    runtimeInfo.lastError = getLastError();\n  }, 5000).unref();\n\n  await startPolling(bot, runtimeInfo);\n}\n\nboot().catch((e) => {\n  console.error(\"[boot] fatal\", { err: safeErr(e) });\n  process.exit(1);\n});\n"
+              "content": "import { loadEnvBestEffort } from \"./lib/env.js\";\n\n// Must happen before any module reads process.env\nloadEnvBestEffort();\n\nimport http from \"node:http\";\n\nimport { run } from \"@grammyjs/runner\";\nimport { cfg, assertRequiredConfig, getBootConfigSummary } from \"./lib/config.js\";\nimport { safeErr } from \"./lib/safeErr.js\";\nimport { getDb } from \"./lib/db.js\";\nimport { buildBot } from \"./bot.js\";\nimport { getLastError, parseAdminIds, setLastError } from \"./lib/runtime.js\";\n\nprocess.on(\"unhandledRejection\", (e) => {\n  console.error(\"[process] unhandledRejection\", { err: safeErr(e) });\n  process.exit(1);\n});\nprocess.on(\"uncaughtException\", (e) => {\n  console.error(\"[process] uncaughtException\", { err: safeErr(e) });\n  process.exit(1);\n});\n\nasync function sleep(ms) {\n  await new Promise((r) => setTimeout(r, ms));\n}\n\nlet pollRunner = null;\n\nfunction startHeartbeat() {\n  const intervalMs = Number(cfg.HEARTBEAT_MS || 60_000);\n  if (!Number.isFinite(intervalMs) || intervalMs <= 0) return;\n\n  setInterval(() => {\n    const m = process.memoryUsage();\n    console.log(\"[heartbeat]\", {\n      uptimeS: Math.floor(process.uptime()),\n      rssMB: Math.round(m.rss / 1e6),\n      heapUsedMB: Math.round(m.heapUsed / 1e6),\n    });\n  }, intervalMs).unref();\n}\n\nasync function maybeStartWebhookServer() {\n  const port = Number(cfg.PORT || 0);\n  if (!port) return { server: null, listening: false, port: 0 };\n\n  const server = http.createServer((req, res) => {\n    res.statusCode = 200;\n    res.setHeader(\"Content-Type\", \"text/plain\");\n    res.end(\"ok\");\n  });\n\n  await new Promise((resolve) => server.listen(port, resolve));\n  console.log(\"[http] listening\", { port });\n\n  return { server, listening: true, port };\n}\n\nasync function startPolling(bot, runtimeInfo) {\n  let backoffMs = 2000;\n\n  for (;;) {\n    try {\n      console.log(\"[polling] starting\", { concurrency: 1 });\n\n      pollRunner = run(bot, { concurrency: 1 });\n      runtimeInfo.updateMode = \"polling\";\n\n      let lastLog = Date.now();\n      const tick = setInterval(() => {\n        const now = Date.now();\n        if (now - lastLog > 60_000) {\n          console.log(\"[polling] alive\");\n          lastLog = now;\n        }\n      }, 30_000);\n      tick.unref();\n\n      await pollRunner.task();\n\n      console.warn(\"[polling] runner stopped (will restart)\");\n    } catch (e) {\n      const msg = safeErr(e);\n      setLastError(e);\n      console.error(\"[polling] error\", { err: msg });\n\n      if (/409|Conflict/i.test(msg)) {\n        console.warn(\"[polling] conflict detected\", {\n          hint: \"Another instance may be running, or a webhook is set. Will backoff and retry.\",\n          backoffMs,\n        });\n\n        try {\n          await bot.api.deleteWebhook({ drop_pending_updates: true });\n          console.log(\"[polling] deleteWebhook ok\");\n        } catch (e2) {\n          console.warn(\"[polling] deleteWebhook failed\", { err: safeErr(e2) });\n        }\n      }\n\n      await sleep(backoffMs);\n      backoffMs = Math.min(20_000, Math.round(backoffMs * 1.8));\n    } finally {\n      try {\n        pollRunner?.abort?.();\n      } catch {}\n      pollRunner = null;\n    }\n  }\n}\n\nasync function boot() {\n  const adminIds = parseAdminIds(cfg.ADMIN_TELEGRAM_USER_IDS);\n  const webhookUrl = String(cfg.TELEGRAM_WEBHOOK_URL || \"\").trim();\n\n  const runtimeInfo = {\n    updateMode: \"unknown\",\n    telegramTokenSet: Boolean(cfg.TELEGRAM_BOT_TOKEN),\n    dbConnected: false,\n    aiEnabled: Boolean(cfg.AI_ENABLED),\n    lastError: \"\",\n  };\n\n  // Single structured startup summary (no secrets)\n  console.log(\"[startup] env\", {\n    ...getBootConfigSummary(cfg),\n    runningMode: \"polling\",\n    webhookUrlSet: Boolean(webhookUrl),\n  });\n\n  assertRequiredConfig(cfg);\n\n  startHeartbeat();\n\n  if (cfg.MONGODB_URI) {\n    try {\n      const db = await getDb(cfg.MONGODB_URI);\n      runtimeInfo.dbConnected = Boolean(db);\n      console.log(\"[db] connect ok\", { connected: runtimeInfo.dbConnected });\n    } catch (e) {\n      setLastError(e);\n      console.warn(\"[db] connect failed\", { err: safeErr(e) });\n      runtimeInfo.dbConnected = false;\n    }\n  } else {\n    console.warn(\"[db] disabled (MONGODB_URI not set)\");\n  }\n\n  const { listening } = await maybeStartWebhookServer();\n\n  const webhookReady = Boolean(webhookUrl) && Boolean(listening);\n\n  const bot = await buildBot({ token: cfg.TELEGRAM_BOT_TOKEN, runtimeInfo, adminIds });\n\n  try {\n    await bot.init();\n    console.log(\"[tg] bot.init ok\", { username: bot.botInfo?.username || \"\" });\n  } catch (e) {\n    setLastError(e);\n    console.warn(\"[tg] bot.init failed (continuing)\", { err: safeErr(e) });\n  }\n\n  try {\n    await bot.api.setMyCommands([\n      { command: \"start\", description: \"Welcome and examples\" },\n      { command: \"help\", description: \"Supported links and troubleshooting\" },\n    ]);\n  } catch (e) {\n    setLastError(e);\n    console.warn(\"[tg] setMyCommands failed (continuing)\", { err: safeErr(e) });\n  }\n\n  if (!webhookReady) {\n    if (webhookUrl && !listening) {\n      console.warn(\n        \"[webhook] TELEGRAM_WEBHOOK_URL is set but PORT is not listening; falling back to polling\"\n      );\n    } else {\n      console.log(\"[webhook] not configured; using polling\");\n    }\n\n    try {\n      await bot.api.deleteWebhook({ drop_pending_updates: true });\n      console.log(\"[tg] deleteWebhook ok\");\n    } catch (e) {\n      setLastError(e);\n      console.warn(\"[tg] deleteWebhook failed (continuing)\", { err: safeErr(e) });\n    }\n\n    setInterval(() => {\n      runtimeInfo.lastError = getLastError();\n    }, 5000).unref();\n\n    await startPolling(bot, runtimeInfo);\n    return;\n  }\n\n  console.warn(\"[webhook] webhook mode is not implemented in this bot. Falling back to polling.\");\n\n  try {\n    await bot.api.deleteWebhook({ drop_pending_updates: true });\n  } catch {}\n\n  setInterval(() => {\n    runtimeInfo.lastError = getLastError();\n  }, 5000).unref();\n\n  await startPolling(bot, runtimeInfo);\n}\n\nboot().catch((e) => {\n  console.error(\"[boot] fatal\", { err: safeErr(e) });\n  process.exit(1);\n});\n"
             },
             "lib": {
               "type": "dir",
@@ -1563,11 +1592,15 @@
                 },
                 "config.js": {
                   "type": "file",
-                  "content": "export const cfg = {\n  TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,\n\n  // Optional rate limit tuning\n  RATE_LIMIT_X_PER_MIN: Number(process.env.RATE_LIMIT_X_PER_MIN || 6),\n  RATE_LIMIT_TIKTOK_PER_MIN: Number(process.env.RATE_LIMIT_TIKTOK_PER_MIN || 6),\n\n  // Downloader gateway\n  MEDIA_DOWNLOAD_ENDPOINT:process.env.MEDIA_DOWNLOAD_ENDPOINT ,\n MEDIA_DOWNLOAD_KEY: process.env.MEDIA_DOWNLOAD_KEY,\n\n  // Network tuning\n  HTTP_TIMEOUT_MS: Number(process.env.HTTP_TIMEOUT_MS || 20_000),\n  HTTP_MAX_REDIRECTS: Number(process.env.HTTP_MAX_REDIRECTS || 5),\n  HTTP_RETRIES: Number(process.env.HTTP_RETRIES || 2),\n  MAX_MEDIA_BYTES: Number(process.env.MAX_MEDIA_BYTES || 45 * 1024 * 1024),\n};\n"
+                  "content": "function toInt(v, fallback) {\n  const n = Number(v);\n  return Number.isFinite(n) ? n : fallback;\n}\n\nfunction toBool(v) {\n  const s = String(v || \"\").trim().toLowerCase();\n  if (!s) return false;\n  return s === \"1\" || s === \"true\" || s === \"yes\" || s === \"on\";\n}\n\nfunction parseAdminIds(raw) {\n  const s = String(raw || \"\").trim();\n  if (!s) return [];\n  return s\n    .split(\",\")\n    .map((x) => x.trim())\n    .filter(Boolean);\n}\n\nexport function getBootConfigSummary(cfg) {\n  const adminCount = Array.isArray(cfg.ADMIN_TELEGRAM_USER_IDS)\n    ? cfg.ADMIN_TELEGRAM_USER_IDS.length\n    : 0;\n\n  return {\n    nodeEnv: cfg.NODE_ENV,\n    port: cfg.PORT,\n    telegramTokenSet: Boolean(cfg.TELEGRAM_BOT_TOKEN),\n    adminIdsSet: adminCount > 0,\n    adminIdsCount: adminCount,\n    mongodbUriSet: Boolean(cfg.MONGODB_URI),\n    cookmybotsAiEndpointSet: Boolean(cfg.COOKMYBOTS_AI_ENDPOINT),\n    cookmybotsAiKeySet: Boolean(cfg.COOKMYBOTS_AI_KEY),\n    aiEnabled: Boolean(cfg.AI_ENABLED),\n  };\n}\n\nexport function getConfig(env = process.env) {\n  const cfg = {\n    NODE_ENV: String(env.NODE_ENV || \"development\"),\n    PORT: toInt(env.PORT, 3000),\n\n    TELEGRAM_BOT_TOKEN: String(env.TELEGRAM_BOT_TOKEN || \"\"),\n\n    // Optional\n    TELEGRAM_WEBHOOK_URL: String(env.TELEGRAM_WEBHOOK_URL || \"\"),\n\n    // Optional: admin-only features\n    ADMIN_TELEGRAM_USER_IDS: parseAdminIds(env.ADMIN_TELEGRAM_USER_IDS),\n\n    // Optional DB (keep behavior: bot runs without DB)\n    MONGODB_URI: String(env.MONGODB_URI || \"\"),\n\n    // Optional rate limit tuning\n    RATE_LIMIT_X_PER_MIN: toInt(env.RATE_LIMIT_X_PER_MIN, 6),\n    RATE_LIMIT_TIKTOK_PER_MIN: toInt(env.RATE_LIMIT_TIKTOK_PER_MIN, 6),\n\n    // Downloader gateway (optional)\n    MEDIA_DOWNLOAD_ENDPOINT: String(env.MEDIA_DOWNLOAD_ENDPOINT || \"\"),\n    MEDIA_DOWNLOAD_KEY: String(env.MEDIA_DOWNLOAD_KEY || \"\"),\n\n    // Network tuning\n    HTTP_TIMEOUT_MS: toInt(env.HTTP_TIMEOUT_MS, 20_000),\n    HTTP_MAX_REDIRECTS: toInt(env.HTTP_MAX_REDIRECTS, 5),\n    HTTP_RETRIES: toInt(env.HTTP_RETRIES, 2),\n    MAX_MEDIA_BYTES: toInt(env.MAX_MEDIA_BYTES, 45 * 1024 * 1024),\n    HTTP_USER_AGENT: String(env.HTTP_USER_AGENT || \"\"),\n\n    // AI gateway (optional; do not crash if missing)\n    COOKMYBOTS_AI_ENDPOINT: String(env.COOKMYBOTS_AI_ENDPOINT || \"\"),\n    COOKMYBOTS_AI_KEY: String(env.COOKMYBOTS_AI_KEY || \"\"),\n    AI_TIMEOUT_MS: toInt(env.AI_TIMEOUT_MS, 600_000),\n    AI_MAX_RETRIES: toInt(env.AI_MAX_RETRIES, 2),\n\n    // Logs / Heartbeat\n    HEARTBEAT_MS: toInt(env.HEARTBEAT_MS, 60_000),\n\n    // RapidAPI (optional; used by downloader fallback)\n    RAPIDAPI_KEY: String(env.RAPIDAPI_KEY || \"\"),\n  };\n\n  cfg.AI_ENABLED = Boolean(cfg.COOKMYBOTS_AI_ENDPOINT) && Boolean(cfg.COOKMYBOTS_AI_KEY);\n  cfg.WEBHOOK_ENABLED = Boolean(cfg.TELEGRAM_WEBHOOK_URL);\n\n  return cfg;\n}\n\nexport const cfg = getConfig(process.env);\n\nexport function assertRequiredConfig(cfgToCheck) {\n  if (!cfgToCheck?.TELEGRAM_BOT_TOKEN) {\n    console.error(\"[boot] missing required env var\", {\n      key: \"TELEGRAM_BOT_TOKEN\",\n      howToFix: \"Set TELEGRAM_BOT_TOKEN in your hosting dashboard environment variables, then redeploy.\",\n    });\n    process.exit(1);\n  }\n}\n"
                 },
                 "db.js": {
                   "type": "file",
                   "content": "\n      import { MongoClient } from \"mongodb\";\n\nlet _client = null;\nlet _db = null;\n\nexport async function getDb(mongoUri) {\n  if (!mongoUri) return null;\n  if (_db) return _db;\n\n  _client = new MongoClient(mongoUri, { maxPoolSize: 5 });\n  await _client.connect();\n  _db = _client.db(); // default DB from URI\n  return _db;\n}"
+                },
+                "env.js": {
+                  "type": "file",
+                  "content": "import fs from \"node:fs\";\nimport path from \"node:path\";\nimport { fileURLToPath } from \"node:url\";\nimport dotenv from \"dotenv\";\n\nlet loaded = false;\n\nexport function loadEnvBestEffort() {\n  if (loaded) return { attempted: true, loaded: false, path: \"\" };\n  loaded = true;\n\n  // Best-effort only. In hosting, .env typically doesn't exist.\n  const cwdPath = path.resolve(process.cwd(), \".env\");\n\n  let usedPath = \"\";\n  let didLoad = false;\n\n  try {\n    if (fs.existsSync(cwdPath)) {\n      const r = dotenv.config({ path: cwdPath });\n      if (!r.error) {\n        usedPath = cwdPath;\n        didLoad = true;\n      }\n    }\n  } catch {\n    // ignore\n  }\n\n  // Also try alongside src/ for some local layouts\n  if (!didLoad) {\n    try {\n      const here = path.dirname(fileURLToPath(import.meta.url));\n      const repoRootGuess = path.resolve(here, \"../../\");\n      const altPath = path.resolve(repoRootGuess, \".env\");\n      if (fs.existsSync(altPath)) {\n        const r = dotenv.config({ path: altPath });\n        if (!r.error) {\n          usedPath = altPath;\n          didLoad = true;\n        }\n      }\n    } catch {\n      // ignore\n    }\n  }\n\n  if (didLoad) {\n    console.log(\"[env] loaded .env\", { path: usedPath });\n  } else {\n    console.log(\"[env] no .env loaded\", { note: \"ok in production; use dashboard env vars\" });\n  }\n\n  return { attempted: true, loaded: didLoad, path: usedPath };\n}\n"
                 },
                 "http.js": {
                   "type": "file",
@@ -1600,7 +1633,7 @@
               "children": {
                 "downloader.js": {
                   "type": "file",
-                  "content": "import { safeErr } from \"../lib/safeErr.js\";\nimport { resolveRedirects } from \"../lib/http.js\";\nimport { resolveTikTokMedia } from \"./tiktok.js\";\nimport { resolveXMedia } from \"./x.js\";\n\nfunction detect(url) {\n  try {\n    const u = new URL(url);\n    const h = u.hostname.toLowerCase();\n    if (h === \"tiktok.com\" || h.endsWith(\".tiktok.com\") || h === \"vm.tiktok.com\") return \"tiktok\";\n    if (h === \"x.com\" || h.endsWith(\".x.com\") || h === \"twitter.com\" || h.endsWith(\".twitter.com\") || h === \"t.co\") return \"x\";\n    return \"\";\n  } catch {\n    return \"\";\n  }\n}\n\nexport async function downloadFromUrl(inputUrl, { platformHint = \"\", status = async () => {}, trace = {} } = {}) {\n  const originalUrl = String(inputUrl || \"\");\n\n  console.log(\"[downloader] start\", {\n    traceId: trace.traceId || \"\",\n    platformHint: platformHint || \"\",\n    originalUrl,\n  });\n\n  await status(\"Resolving redirects…\");\n  const normalizedUrl = await resolveRedirects(originalUrl);\n\n  const platform = platformHint || detect(normalizedUrl) || detect(originalUrl);\n  if (!platform) {\n    const e = new Error(\"UNSUPPORTED_URL\");\n    e.code = \"UNSUPPORTED_URL\";\n    console.warn(\"[downloader] unsupported\", {\n      traceId: trace.traceId || \"\",\n      originalUrl,\n      normalizedUrl,\n    });\n    throw e;\n  }\n\n  console.log(\"[downloader] detected\", {\n    traceId: trace.traceId || \"\",\n    platform,\n    originalUrl,\n    normalizedUrl,\n  });\n\n  try {\n    await status(\"Extracting media…\");\n    let result;\n\n    if (platform === \"tiktok\") {\n      result = await resolveTikTokMedia(normalizedUrl);\n    } else if (platform === \"x\") {\n      result = await resolveXMedia(normalizedUrl);\n    } else {\n      const e = new Error(\"UNSUPPORTED_URL\");\n      e.code = \"UNSUPPORTED_URL\";\n      throw e;\n    }\n\n    console.log(\"[downloader] resolve ok\", {\n      traceId: trace.traceId || \"\",\n      platform,\n      kind: result?.kind || \"\",\n      itemCount: Array.isArray(result?.items) ? result.items.length : 0,\n    });\n\n    return result;\n  } catch (e) {\n    const msg = safeErr(e);\n    console.error(\"[downloader] resolve failed\", {\n      traceId: trace.traceId || \"\",\n      platform,\n      normalizedUrl,\n      err: msg,\n    });\n    throw e;\n  }\n}\n"
+                  "content": "import { resolveTikTokMedia } from \"../services/tiktok.js\";\nimport { safeErr } from \"../lib/safeErr.js\";\nimport fetch from \"node-fetch\"; // pastikan node >=18, kalau node lama bisa pakai node-fetch\n\n// --- definisi API23 di sini supaya tidak perlu file baru ---\nasync function resolveTikTokViaAPI23(videoUrl) {\n  const RAPID_KEY = process.env.RAPIDAPI_KEY;\n  if (!RAPID_KEY) throw new Error(\"RapidAPI key missing\");\n\n  const RAPID_HOST = \"tiktok-video-downloader-api.p.rapidapi.com\";\n  const endpoint = `https://${RAPID_HOST}/media?videoUrl=${encodeURIComponent(videoUrl)}`;\n\n  const res = await fetch(endpoint, {\n    method: \"GET\",\n    headers: {\n      \"x-rapidapi-key\": RAPID_KEY,\n      \"x-rapidapi-host\": RAPID_HOST,\n    },\n  });\n\n  if (!res.ok) throw new Error(`RapidAPI request failed: ${res.status}`);\n\n  const data = await res.json();\n  if (!data || !data.result) throw new Error(\"Invalid API23 response\");\n\n  return {\n    kind: \"video\",\n    items: [\n      { type: \"video\", url: data.result.play || data.result.download },\n    ],\n  };\n}\n\n// Contoh fungsi downloadFromUrl\nexport async function downloadFromUrl(url, { platformHint, status, trace }) {\n  const normalizedUrl = String(url || \"\");\n  const platform = platformHint;\n\n  if (platform === \"tiktok\") {\n    try {\n      await status?.(\"Downloading via API23…\");\n\n      let result;\n      try {\n        // Pakai API23 dulu\n        result = await resolveTikTokViaAPI23(normalizedUrl);\n      } catch (e) {\n        console.warn(\"[downloader] API23 failed, fallback to scrapper\", { err: safeErr(e) });\n        result = await resolveTikTokMedia(normalizedUrl);\n      }\n\n      console.log(\"[downloader] resolve ok\", {\n        traceId: trace?.traceId || \"\",\n        platform,\n        kind: result.kind,\n        itemCount: result.items.length,\n      });\n\n      return result;\n    } catch (e) {\n      const msg = safeErr(e);\n      console.error(\"[downloader] resolve failed\", {\n        traceId: trace?.traceId || \"\",\n        platform,\n        normalizedUrl,\n        err: msg,\n      });\n      throw e;\n    }\n  }\n\n  throw new Error(\"UNSUPPORTED_PLATFORM\");\n}"
                 },
                 "telegramSender.js": {
                   "type": "file",
@@ -1608,7 +1641,7 @@
                 },
                 "tiktok.js": {
                   "type": "file",
-                  "content": "import { fetchWithRetries } from \"../lib/http.js\";\n\nfunction extractJsonFromHtml(html) {\n  const s = String(html || \"\");\n\n  // Try SIGI_STATE (common)\n  const sigi = s.match(/<script[^>]*id=\"SIGI_STATE\"[^>]*>([\\s\\S]*?)<\\/script>/i);\n  if (sigi && sigi[1]) {\n    try {\n      return JSON.parse(sigi[1]);\n    } catch {}\n  }\n\n  // Try __UNIVERSAL_DATA_FOR_REHYDRATION__\n  const uni = s.match(/<script[^>]*id=\"__UNIVERSAL_DATA_FOR_REHYDRATION__\"[^>]*>([\\s\\S]*?)<\\/script>/i);\n  if (uni && uni[1]) {\n    try {\n      return JSON.parse(uni[1]);\n    } catch {}\n  }\n\n  return null;\n}\n\nfunction pickBestVideoUrl(obj) {\n  // Heuristics over known TikTok shapes\n  // Return a direct mp4 URL if available.\n  const candidates = [];\n\n  try {\n    const itemModule = obj?.ItemModule || obj?.itemModule;\n    if (itemModule && typeof itemModule === \"object\") {\n      const firstKey = Object.keys(itemModule)[0];\n      const item = itemModule[firstKey];\n      const play = item?.video?.playAddr;\n      const download = item?.video?.downloadAddr;\n      const bitRates = item?.video?.bitrateInfo;\n      if (Array.isArray(bitRates)) {\n        for (const b of bitRates) {\n          const u = b?.PlayAddr?.UrlList?.[0] || b?.PlayAddr?.UrlList?.[1];\n          if (u) candidates.push(String(u));\n        }\n      }\n      if (play) candidates.push(String(play));\n      if (download) candidates.push(String(download));\n\n      const images = item?.imagePost?.images;\n      if (Array.isArray(images) && images.length) {\n        const imageUrls = images\n          .map((im) => im?.imageURL?.urlList?.[0] || im?.imageURL?.urlList?.[1])\n          .filter(Boolean)\n          .map(String);\n        if (imageUrls.length) {\n          return { type: \"images\", urls: imageUrls };\n        }\n      }\n    }\n  } catch {}\n\n  const uniq = Array.from(new Set(candidates.filter(Boolean)));\n  if (uniq.length) return { type: \"video\", urls: uniq };\n  return null;\n}\n\nexport async function resolveTikTokMedia(url) {\n  const u = String(url || \"\");\n\n  const res = await fetchWithRetries(u, {\n    method: \"GET\",\n    headers: {\n      Accept: \"text/html,application/xhtml+xml\",\n    },\n  });\n\n  if (!res.ok) {\n    if (res.status === 401 || res.status === 403 || res.status === 404) {\n      const e = new Error(\"Public content only\");\n      e.code = \"PUBLIC_ONLY\";\n      throw e;\n    }\n    throw new Error(`TIKTOK_HTTP_${res.status}`);\n  }\n\n  const html = await res.text();\n  const json = extractJsonFromHtml(html);\n  if (!json) {\n    // TikTok may block scraping or require JS; treat as public-only restriction.\n    const e = new Error(\"Public content only\");\n    e.code = \"PUBLIC_ONLY\";\n    throw e;\n  }\n\n  const picked = pickBestVideoUrl(json);\n  if (!picked) {\n    const e = new Error(\"Public content only\");\n    e.code = \"PUBLIC_ONLY\";\n    throw e;\n  }\n\n  if (picked.type === \"images\") {\n    return {\n      platform: \"tiktok\",\n      kind: \"images\",\n      items: picked.urls.map((x) => ({ url: x, mime: \"image/jpeg\" })),\n    };\n  }\n\n  return {\n    platform: \"tiktok\",\n    kind: \"video\",\n    items: [{ url: picked.urls[0], mime: \"video/mp4\" }],\n  };\n}\n"
+                  "content": "export async function resolveTikTokMedia(url) {\n  const u = String(url || \"\").trim();\n  if (!u) {\n    const e = new Error(\"Invalid URL\");\n    e.code = \"INVALID_URL\";\n    throw e;\n  }\n\n  const endpoint = `https://www.tikwm.com/api/?url=${encodeURIComponent(u)}`;\n\n  console.log(\"[tikwm] request\", endpoint);\n\n  let res;\n  try {\n    res = await fetch(endpoint, {\n      method: \"GET\",\n      headers: {\n        \"User-Agent\":\n          \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36\",\n        Accept: \"application/json\",\n      },\n    });\n  } catch (err) {\n    console.error(\"[tikwm] network error\", err?.message || err);\n    throw new Error(\"TikWM network failed\");\n  }\n\n  if (!res.ok) {\n    console.error(\"[tikwm] http error\", res.status);\n    throw new Error(`TIKWM_HTTP_${res.status}`);\n  }\n\n  let json;\n  try {\n    json = await res.json();\n  } catch {\n    throw new Error(\"Invalid TikWM response\");\n  }\n\n  console.log(\"[tikwm] response\", {\n    code: json?.code,\n    hasData: Boolean(json?.data),\n  });\n\n  if (!json?.data) {\n    const e = new Error(\"Public content only\");\n    e.code = \"PUBLIC_ONLY\";\n    throw e;\n  }\n\n  const videoUrl =\n    json?.data?.play ||\n    json?.data?.wmplay ||\n    json?.data?.hdplay ||\n    \"\";\n\n  if (!videoUrl) {\n    const e = new Error(\"Video not found\");\n    e.code = \"VIDEO_NOT_FOUND\";\n    throw e;\n  }\n\n  return {\n    platform: \"tiktok\",\n    kind: \"video\",\n    items: [{ url: videoUrl, mime: \"video/mp4\" }],\n  };\n}"
                 },
                 "x.js": {
                   "type": "file",
@@ -1622,42 +1655,42 @@
       "commands": [
         {
           "command": "/health",
-          "description": "Admin-only diagnostics: update mode, DB connectivity, AI enabled bool, uptime, and last error summary.",
+          "description": "Admin-only diagnostics for update mode, DB connectivity, AI enabled boolean, uptime, and last error summary.",
           "usage": "/health",
           "examples": [
-            "Admin: /health → Bot: Shows polling/webhook mode and last error summary"
+            "Admin: /health → Bot: Shows polling mode and DB connected boolean"
           ],
-          "example": "Admin: /health → Bot: Shows polling/webhook mode and last error summary",
-          "notes": "Only available when ADMIN_TELEGRAM_USER_IDS is set and the user is listed."
+          "example": "Admin: /health → Bot: Shows polling mode and DB connected boolean",
+          "notes": "Unchanged behavior. If ADMIN_TELEGRAM_USER_IDS is not set, this command stays effectively unavailable."
         },
         {
           "command": "/help",
-          "description": "Shows supported sources, public-only limitation, common failure reasons, and a privacy note.",
+          "description": "Explains supported links, public-only limitations, and troubleshooting tips.",
           "usage": "/help",
           "examples": [
-            "User: /help → Bot: Explains what links work and why a download might fail"
+            "User: /help → Bot: Shows how to use the bot"
           ],
-          "example": "User: /help → Bot: Explains what links work and why a download might fail",
-          "notes": "Unchanged."
+          "example": "User: /help → Bot: Shows how to use the bot",
+          "notes": "Unchanged user-facing content; now uses centralized config safely."
         },
         {
           "command": "/start",
-          "description": "Welcome message plus examples of TikTok and X links you can paste.",
+          "description": "Welcome message and examples of TikTok and X links you can paste.",
           "usage": "/start",
           "examples": [
-            "User: /start → Bot: Shows examples of TikTok and X links"
+            "User: /start → Bot: Shows example links"
           ],
-          "example": "User: /start → Bot: Shows examples of TikTok and X links",
-          "notes": "Unchanged."
+          "example": "User: /start → Bot: Shows example links",
+          "notes": "Unchanged behavior."
         }
       ],
       "envVarDocs": [
         {
           "key": "TELEGRAM_BOT_TOKEN",
           "title": "Telegram Bot Token",
-          "description": "Token from BotFather used to connect to Telegram.",
-          "usage": "Required at startup. The bot exits with a clear message if missing.",
-          "howToGet": "Create a bot with @BotFather and copy the token.",
+          "description": "Telegram bot token from BotFather. Required to start.",
+          "usage": "Read at boot from environment variables; process exits with a clear log message if missing.",
+          "howToGet": "Create a bot using @BotFather and copy the token.",
           "example": "123456789:AA... (format only)",
           "isSecret": true,
           "required": true
@@ -1704,30 +1737,30 @@
         },
         {
           "key": "MONGODB_URI",
-          "title": "MongoDB Connection String",
-          "description": "MongoDB connection string for optional persistence (memory/logs). If missing, the bot still runs.",
-          "usage": "Used at boot to connect; failures are logged but do not block /start and /help.",
-          "howToGet": "Create a MongoDB database (Atlas or your provider) and copy the connection string.",
-          "example": "mongodb+srv://user:pass@cluster.example.mongodb.net/dbname",
+          "title": "MongoDB Connection URI",
+          "description": "Optional database connection string for persistence and memory features (if used).",
+          "usage": "If set, the bot attempts to connect on boot; if missing, DB is disabled with a warning log.",
+          "howToGet": "Create a MongoDB database and copy the connection string URI.",
+          "example": "mongodb+srv://user:pass@cluster0.example.mongodb.net/db",
           "isSecret": true,
           "required": false
         },
         {
           "key": "COOKMYBOTS_AI_ENDPOINT",
-          "title": "CookMyBots AI Endpoint",
-          "description": "Base URL for CookMyBots AI Gateway. Only used if the bot uses AI features.",
-          "usage": "Logged at startup (presence only).",
-          "howToGet": "From CookMyBots project settings.",
+          "title": "CookMyBots AI Gateway Endpoint",
+          "description": "Base URL for the CookMyBots AI Gateway.",
+          "usage": "AI features are enabled only if both COOKMYBOTS_AI_ENDPOINT and COOKMYBOTS_AI_KEY are set.",
+          "howToGet": "Provided by CookMyBots.",
           "example": "https://api.cookmybots.com/api/ai",
           "isSecret": false,
           "required": false
         },
         {
           "key": "COOKMYBOTS_AI_KEY",
-          "title": "CookMyBots AI Key",
-          "description": "Secret key for CookMyBots AI Gateway. Only used if the bot uses AI features.",
-          "usage": "Logged at startup (presence only).",
-          "howToGet": "From CookMyBots project settings.",
+          "title": "CookMyBots AI Gateway Key",
+          "description": "Secret key for CookMyBots AI Gateway authentication.",
+          "usage": "AI features are enabled only if both COOKMYBOTS_AI_ENDPOINT and COOKMYBOTS_AI_KEY are set.",
+          "howToGet": "Provided by CookMyBots.",
           "example": "cmb_ai_... (format only)",
           "isSecret": true,
           "required": false
@@ -1735,10 +1768,10 @@
         {
           "key": "ADMIN_TELEGRAM_USER_IDS",
           "title": "Admin Telegram User IDs",
-          "description": "Comma-separated Telegram numeric user IDs allowed to use /health.",
-          "usage": "Parsed on boot; if empty, /health is effectively unavailable.",
-          "howToGet": "Get your Telegram numeric ID (e.g. from @userinfobot).",
-          "example": "123456789,987654321",
+          "description": "Comma-separated Telegram user IDs allowed to use admin-only diagnostics like /health.",
+          "usage": "If unset or empty, admin features stay disabled.",
+          "howToGet": "Send a message to the bot and check your Telegram numeric user ID (or use another bot that tells you).",
+          "example": "12345678,87654321",
           "isSecret": false,
           "required": false
         },
@@ -1755,10 +1788,10 @@
         {
           "key": "PORT",
           "title": "HTTP Port",
-          "description": "Port for the optional HTTP server used when considering webhook mode. Not required for polling.",
-          "usage": "If set, the bot starts a tiny server that responds 'ok'.",
-          "howToGet": "Provided by your hosting platform (Render sets PORT automatically).",
-          "example": "10000",
+          "description": "Port for the optional HTTP server used for hosting platforms that require a listening port.",
+          "usage": "Defaults to 3000 when not set.",
+          "howToGet": "Hosting platform sets this automatically, or you can set it.",
+          "example": "3000",
           "isSecret": false,
           "required": false
         },
@@ -1771,35 +1804,45 @@
           "example": "60000",
           "isSecret": false,
           "required": false
+        },
+        {
+          "key": "NODE_ENV",
+          "title": "Node Environment",
+          "description": "Runtime environment name.",
+          "usage": "Defaults to development when not set.",
+          "howToGet": "Set to production on hosting if desired.",
+          "example": "production",
+          "isSecret": false,
+          "required": false
         }
       ],
       "commandDocs": [
         {
           "command": "/start",
-          "description": "Welcome message plus examples of TikTok and X links you can paste.",
+          "description": "Welcome message and examples of TikTok and X links you can paste.",
           "usage": "/start",
           "examples": [
-            "User: /start → Bot: Shows examples of TikTok and X links"
+            "User: /start → Bot: Shows example links"
           ],
-          "notes": "Unchanged."
+          "notes": "Unchanged behavior."
         },
         {
           "command": "/help",
-          "description": "Shows supported sources, public-only limitation, common failure reasons, and a privacy note.",
+          "description": "Explains supported links, public-only limitations, and troubleshooting tips.",
           "usage": "/help",
           "examples": [
-            "User: /help → Bot: Explains what links work and why a download might fail"
+            "User: /help → Bot: Shows how to use the bot"
           ],
-          "notes": "Unchanged."
+          "notes": "Unchanged user-facing content; now uses centralized config safely."
         },
         {
           "command": "/health",
-          "description": "Admin-only diagnostics: update mode, DB connectivity, AI enabled bool, uptime, and last error summary.",
+          "description": "Admin-only diagnostics for update mode, DB connectivity, AI enabled boolean, uptime, and last error summary.",
           "usage": "/health",
           "examples": [
-            "Admin: /health → Bot: Shows polling/webhook mode and last error summary"
+            "Admin: /health → Bot: Shows polling mode and DB connected boolean"
           ],
-          "notes": "Only available when ADMIN_TELEGRAM_USER_IDS is set and the user is listed."
+          "notes": "Unchanged behavior. If ADMIN_TELEGRAM_USER_IDS is not set, this command stays effectively unavailable."
         }
       ],
       "aiMessages": [
@@ -1836,6 +1879,16 @@
           "content": "Implemented robust Telegram boot + polling reliability with @grammyjs/runner (concurrency 1), added a startup banner with env sanity (no secrets), clear webhook-vs-polling fallback behavior, 409 Conflict remediation (deleteWebhook + backoff), periodic polling/heartbeat logs, and a global error boundary. Added structured diagnostics throughout the downloader + Telegram sending pipeline, plus stronger media send fallbacks (video→document→source URL). Added an admin-only /health command gated by ADMIN_TELEGRAM_USER_IDS. Updated .env.sample and appended troubleshooting sections to README/DOCS.\n\nFiles touched (10): .env.sample, DOCS.md, README.md, package.json, src/bot.js, src/commands/health.js…\nValidation: ✅ project passes syntax/basic checks after this edit.",
           "gitBeforeSha": "0eee01457c4d585f2c54461fe12591ab70514307",
           "gitAfterSha": "652c8c409e6cd900b186d089cbd581894f5d4c66"
+        },
+        {
+          "role": "user",
+          "content": "i update some files codes and ran it locally it work perfectly ,but on this web it doesnt start because the bot cant read .env files ,help me to analize and then help me to fix this problem"
+        },
+        {
+          "role": "assistant",
+          "content": "Implemented deployment-safe env loading and startup diagnostics without changing the bot’s user-facing commands/behavior. The bot now best-effort loads .env locally via dotenv (won’t crash if missing), centralizes all env reads with safe defaults in src/lib/config.js, prints a single structured startup summary (booleans only, no secrets), and exits with a clear message only when TELEGRAM_BOT_TOKEN is missing. Updated README.md and DOCS.md with a deployment env vars section and a debug checklist.\n\nFiles touched (8): .env.sample, DOCS.md, README.md, package.json, src/commands/help.js, src/index.js…\nValidation: ✅ project passes syntax/basic checks after this edit.",
+          "gitBeforeSha": "e5545dd675c4994c42df5b2aad19ed7167b37a82",
+          "gitAfterSha": "f3c0ff9d96f642e46a68db8c9ad05eda3d9a3b97"
         }
       ],
       "createdBy": "",
@@ -1853,15 +1906,15 @@
       "balanceCentsRemaining": 0,
       "billing": {
         "ok": true,
-        "charged": 61,
+        "charged": 57,
         "remaining": 0,
-        "chargedCents": 61,
+        "chargedCents": 57,
         "remainingCents": 0,
         "currency": "USD",
-        "baseUsd": 0.30567,
-        "markupUsd": 0.30567,
+        "baseUsd": 0.28298599999999996,
+        "markupUsd": 0.28298599999999996,
         "platformFeeUsd": 0,
-        "totalUsd": 0.61134
+        "totalUsd": 0.5659719999999999
       },
       "title": "Telegram - Media Downloader"
     }
