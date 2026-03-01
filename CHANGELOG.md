@@ -2,6 +2,11 @@
 
 All notable changes to this bot project are recorded here.
 
+## 2026-03-01 22:11:46. UTC
+- Request: i update some files codes and ran it locally it work perfectly ,but on this web it doesnt start because the bot cant read .env files ,help me to analize and then help me to fix this problem
+- Summary: Implemented deployment-safe env loading and startup diagnostics without changing the bot’s user-facing commands/behavior. The bot now best-effort loads .env locally via dotenv (won’t crash if missing), centralizes all e…
+- Files: .env.sample, DOCS.md, README.md, package.json, src/commands/help.js, src/index.js, src/lib/config.js, src/lib/env.js
+
 ## 2026-03-01 17:42:25. UTC
 - Request: the bot wont connect or response on telegram ,help me to fix it
 - Summary: Implemented robust Telegram boot + polling reliability with @grammyjs/runner (concurrency 1), added a startup banner with env sanity (no secrets), clear webhook-vs-polling fallback behavior, 409 Conflict remediation (de…
