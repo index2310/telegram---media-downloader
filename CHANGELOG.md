@@ -2,6 +2,11 @@
 
 All notable changes to this bot project are recorded here.
 
+## 2026-03-02 06:39:38. UTC
+- Request: Bot deployed successfully but doesn’t respond, help me check for errors and fix
+- Summary: Fixed responsiveness by making update mode explicit and reliable: polling is default and now uses @grammyjs/runner with alive/update batch logs; webhook mode is supported only when PUBLIC_BASE_URL is set and runs an Exp…
+- Files: .env.sample, DOCS.md, package.json, src/bot.js, src/commands/health.js, src/index.js, src/lib/config.js, src/lib/db.js, src/lib/runtime.js, src/services/downloader.js, src/services/telegramSender.js
+
 ## 2026-03-01 22:11:46. UTC
 - Request: i update some files codes and ran it locally it work perfectly ,but on this web it doesnt start because the bot cant read .env files ,help me to analize and then help me to fix this problem
 - Summary: Implemented deployment-safe env loading and startup diagnostics without changing the bot’s user-facing commands/behavior. The bot now best-effort loads .env locally via dotenv (won’t crash if missing), centralizes all e…
