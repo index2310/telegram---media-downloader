@@ -5,12 +5,26 @@ loadEnvBestEffort();
 
 import http from "node:http";
 
+import express from "express";
+import { webhookCallback } from "grammy";
 import { run } from "@grammyjs/runner";
-import { cfg, assertRequiredConfig, getBootConfigSummary } from "./lib/config.js";
+
+import {
+  cfg,
+  assertRequiredConfig,
+  getBootConfigSummary,
+  getWebhookConfigSummary,
+} from "./lib/config.js";
 import { safeErr } from "./lib/safeErr.js";
-import { getDb } from "./lib/db.js";
+import { connectDb } from "./lib/db.js";
 import { buildBot } from "./bot.js";
-import { getLastError, parseAdminIds, setLastError } from "./lib/runtime.js";
+import {
+  getLastError,
+  parseAdminIds,
+  setLastError,
+  markLastUpdateReceived,
+  markLastHandledMessage,
+} from "./lib/runtime.js";
 
 process.on("unhandledRejection", (e) => {
   console.error("[process] unhandledRejection", { err: safeErr(e) });
@@ -33,28 +47,11 @@ function startHeartbeat() {
 
   setInterval(() => {
     const m = process.memoryUsage();
-    console.log("[heartbeat]", {
-      uptimeS: Math.floor(process.uptime()),
+    console.log("[mem]", {
       rssMB: Math.round(m.rss / 1e6),
       heapUsedMB: Math.round(m.heapUsed / 1e6),
     });
   }, intervalMs).unref();
-}
-
-async function maybeStartWebhookServer() {
-  const port = Number(cfg.PORT || 0);
-  if (!port) return { server: null, listening: false, port: 0 };
-
-  const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "text/plain");
-    res.end("ok");
-  });
-
-  await new Promise((resolve) => server.listen(port, resolve));
-  console.log("[http] listening", { port });
-
-  return { server, listening: true, port };
 }
 
 async function startPolling(bot, runtimeInfo) {
@@ -62,20 +59,22 @@ async function startPolling(bot, runtimeInfo) {
 
   for (;;) {
     try {
-      console.log("[polling] starting", { concurrency: 1 });
-
+      console.log("[polling] start", { concurrency: 1 });
       pollRunner = run(bot, { concurrency: 1 });
       runtimeInfo.updateMode = "polling";
 
-      let lastLog = Date.now();
-      const tick = setInterval(() => {
+      let lastAliveLogAt = 0;
+      const aliveTick = setInterval(() => {
         const now = Date.now();
-        if (now - lastLog > 60_000) {
-          console.log("[polling] alive");
-          lastLog = now;
+        if (now - lastAliveLogAt >= 60_000) {
+          console.log("[polling] alive", {
+            lastUpdateAt: runtimeInfo.lastUpdateAt || "",
+            lastHandledAt: runtimeInfo.lastHandledAt || "",
+          });
+          lastAliveLogAt = now;
         }
-      }, 30_000);
-      tick.unref();
+      }, 15_000);
+      aliveTick.unref();
 
       await pollRunner.task();
 
@@ -87,7 +86,7 @@ async function startPolling(bot, runtimeInfo) {
 
       if (/409|Conflict/i.test(msg)) {
         console.warn("[polling] conflict detected", {
-          hint: "Another instance may be running, or a webhook is set. Will backoff and retry.",
+          hint: "Another instance may be polling or a webhook is set. Backing off and retrying.",
           backoffMs,
         });
 
@@ -95,6 +94,7 @@ async function startPolling(bot, runtimeInfo) {
           await bot.api.deleteWebhook({ drop_pending_updates: true });
           console.log("[polling] deleteWebhook ok");
         } catch (e2) {
+          setLastError(e2);
           console.warn("[polling] deleteWebhook failed", { err: safeErr(e2) });
         }
       }
@@ -110,48 +110,145 @@ async function startPolling(bot, runtimeInfo) {
   }
 }
 
+async function startWebhookServer(bot, runtimeInfo) {
+  const PORT = Number(cfg.PORT || 0);
+  const app = express();
+
+  // Health probe for infra. Not the Telegram /health command.
+  app.get("/", (_req, res) => {
+    res.status(200).type("text/plain").send("ok");
+  });
+
+  // Telegram webhook endpoint
+  app.post(
+    cfg.TELEGRAM_WEBHOOK_PATH,
+    webhookCallback(bot, "express", {
+      secretToken: cfg.TELEGRAM_WEBHOOK_SECRET || undefined,
+    })
+  );
+
+  // Keep server alive for platform requirements.
+  const server = http.createServer(app);
+
+  await new Promise((resolve) => server.listen(PORT, resolve));
+  console.log("[webhook] http listening", {
+    port: PORT,
+    path: cfg.TELEGRAM_WEBHOOK_PATH,
+  });
+
+  // Register webhook at Telegram
+  try {
+    await bot.api.setWebhook(cfg.TELEGRAM_WEBHOOK_URL, {
+      secret_token: cfg.TELEGRAM_WEBHOOK_SECRET || undefined,
+      drop_pending_updates: true,
+    });
+    console.log("[webhook] setWebhook ok", {
+      urlSet: Boolean(cfg.TELEGRAM_WEBHOOK_URL),
+      path: cfg.TELEGRAM_WEBHOOK_PATH,
+    });
+  } catch (e) {
+    setLastError(e);
+    console.error("[webhook] setWebhook failed", { err: safeErr(e) });
+    console.warn("[webhook] falling back to polling");
+
+    // Best effort cleanup
+    try {
+      await bot.api.deleteWebhook({ drop_pending_updates: true });
+    } catch {}
+
+    await startPolling(bot, runtimeInfo);
+  }
+
+  runtimeInfo.updateMode = "webhook";
+  return server;
+}
+
 async function boot() {
   const adminIds = parseAdminIds(cfg.ADMIN_TELEGRAM_USER_IDS);
-  const webhookUrl = String(cfg.TELEGRAM_WEBHOOK_URL || "").trim();
 
   const runtimeInfo = {
     updateMode: "unknown",
     telegramTokenSet: Boolean(cfg.TELEGRAM_BOT_TOKEN),
+    dbEnabled: Boolean(cfg.MONGODB_URI),
     dbConnected: false,
     aiEnabled: Boolean(cfg.AI_ENABLED),
     lastError: "",
+    lastUpdateAt: "",
+    lastHandledAt: "",
+    lastHandledChatId: "",
+    lastHandledUserId: "",
   };
 
-  // Single structured startup summary (no secrets)
+  const aiEnabled = Boolean(cfg.COOKMYBOTS_AI_ENDPOINT) && Boolean(cfg.COOKMYBOTS_AI_KEY);
+
+  // Startup sanity summary (no secrets)
   console.log("[startup] env", {
     ...getBootConfigSummary(cfg),
-    runningMode: "polling",
-    webhookUrlSet: Boolean(webhookUrl),
+    ADMIN_TELEGRAM_USER_IDS: adminIds.length > 0,
+    PUBLIC_BASE_URL: Boolean(cfg.PUBLIC_BASE_URL),
+    AI_ENABLED: aiEnabled,
+    ...getWebhookConfigSummary(cfg),
   });
 
   assertRequiredConfig(cfg);
 
   startHeartbeat();
 
+  // DB connect is optional
   if (cfg.MONGODB_URI) {
     try {
-      const db = await getDb(cfg.MONGODB_URI);
+      const db = await connectDb(cfg.MONGODB_URI);
       runtimeInfo.dbConnected = Boolean(db);
       console.log("[db] connect ok", { connected: runtimeInfo.dbConnected });
     } catch (e) {
       setLastError(e);
-      console.warn("[db] connect failed", { err: safeErr(e) });
       runtimeInfo.dbConnected = false;
+      console.warn("[db] connect failed", { err: safeErr(e) });
     }
   } else {
-    console.warn("[db] disabled (MONGODB_URI not set)");
+    console.warn("[db] disabled (no MONGODB_URI)");
   }
 
-  const { listening } = await maybeStartWebhookServer();
-
-  const webhookReady = Boolean(webhookUrl) && Boolean(listening);
-
   const bot = await buildBot({ token: cfg.TELEGRAM_BOT_TOKEN, runtimeInfo, adminIds });
+
+  // Global update received hook + periodic update counts
+  const updateCounts = { batch: 0 };
+  bot.use(async (ctx, next) => {
+    try {
+      markLastUpdateReceived(runtimeInfo, ctx);
+      updateCounts.batch += 1;
+
+      // Log update basics (no text content)
+      console.log("[update] received", {
+        type: Object.keys(ctx.update || {})[1] || "unknown",
+        chatId: String(ctx.chat?.id || ""),
+        fromId: String(ctx.from?.id || ""),
+        hasText: Boolean(ctx.message?.text),
+      });
+
+      await next();
+    } catch (e) {
+      setLastError(e);
+      console.error("[update] middleware error", { err: safeErr(e) });
+      throw e;
+    }
+  });
+
+  setInterval(() => {
+    if (updateCounts.batch > 0) {
+      console.log("[updates] batch", { count: updateCounts.batch });
+      updateCounts.batch = 0;
+    }
+    runtimeInfo.lastError = getLastError();
+  }, 30_000).unref();
+
+  // Message handled marker (best effort)
+  bot.use(async (ctx, next) => {
+    await next();
+    if (ctx.message?.message_id) {
+      markLastHandledMessage(runtimeInfo, ctx);
+    }
+  });
 
   try {
     await bot.init();
@@ -165,46 +262,28 @@ async function boot() {
     await bot.api.setMyCommands([
       { command: "start", description: "Welcome and examples" },
       { command: "help", description: "Supported links and troubleshooting" },
+      { command: "health", description: "Admin-only diagnostics" },
     ]);
   } catch (e) {
     setLastError(e);
     console.warn("[tg] setMyCommands failed (continuing)", { err: safeErr(e) });
   }
 
-  if (!webhookReady) {
-    if (webhookUrl && !listening) {
-      console.warn(
-        "[webhook] TELEGRAM_WEBHOOK_URL is set but PORT is not listening; falling back to polling"
-      );
-    } else {
-      console.log("[webhook] not configured; using polling");
-    }
-
-    try {
-      await bot.api.deleteWebhook({ drop_pending_updates: true });
-      console.log("[tg] deleteWebhook ok");
-    } catch (e) {
-      setLastError(e);
-      console.warn("[tg] deleteWebhook failed (continuing)", { err: safeErr(e) });
-    }
-
-    setInterval(() => {
-      runtimeInfo.lastError = getLastError();
-    }, 5000).unref();
-
-    await startPolling(bot, runtimeInfo);
+  if (cfg.WEBHOOK_ENABLED) {
+    console.log("[mode] webhook enabled", { path: cfg.TELEGRAM_WEBHOOK_PATH });
+    await startWebhookServer(bot, runtimeInfo);
     return;
   }
 
-  console.warn("[webhook] webhook mode is not implemented in this bot. Falling back to polling.");
+  console.log("[mode] polling enabled");
 
   try {
     await bot.api.deleteWebhook({ drop_pending_updates: true });
-  } catch {}
-
-  setInterval(() => {
-    runtimeInfo.lastError = getLastError();
-  }, 5000).unref();
+    console.log("[tg] deleteWebhook ok");
+  } catch (e) {
+    setLastError(e);
+    console.warn("[tg] deleteWebhook failed (continuing)", { err: safeErr(e) });
+  }
 
   await startPolling(bot, runtimeInfo);
 }

@@ -2,34 +2,16 @@
   "projectId": "d77fb276-6a70-4a9b-b0c5-223a6a0ce63e",
   "commands": [
     {
-      "command": "/health",
-      "description": "Admin-only diagnostics for update mode, DB connectivity, AI enabled boolean, uptime, and last error summary.",
-      "usage": "/health",
-      "examples": [
-        "Admin: /health → Bot: Shows polling mode and DB connected boolean"
-      ],
-      "example": "Admin: /health → Bot: Shows polling mode and DB connected boolean",
-      "notes": "Unchanged behavior. If ADMIN_TELEGRAM_USER_IDS is not set, this command stays effectively unavailable."
+      "name": "health",
+      "file": "src/commands/health.js"
     },
     {
-      "command": "/help",
-      "description": "Explains supported links, public-only limitations, and troubleshooting tips.",
-      "usage": "/help",
-      "examples": [
-        "User: /help → Bot: Shows how to use the bot"
-      ],
-      "example": "User: /help → Bot: Shows how to use the bot",
-      "notes": "Unchanged user-facing content; now uses centralized config safely."
+      "name": "help",
+      "file": "src/commands/help.js"
     },
     {
-      "command": "/start",
-      "description": "Welcome message and examples of TikTok and X links you can paste.",
-      "usage": "/start",
-      "examples": [
-        "User: /start → Bot: Shows example links"
-      ],
-      "example": "User: /start → Bot: Shows example links",
-      "notes": "Unchanged behavior."
+      "name": "start",
+      "file": "src/commands/start.js"
     }
   ],
   "aiMessages": [

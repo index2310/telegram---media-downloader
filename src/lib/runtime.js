@@ -24,3 +24,24 @@ export function isAdmin(userId, adminIds) {
   if (!id) return false;
   return Array.isArray(adminIds) && adminIds.includes(id);
 }
+
+export function markLastUpdateReceived(runtimeInfo, ctx) {
+  if (!runtimeInfo) return;
+  runtimeInfo.lastUpdateAt = new Date().toISOString();
+
+  // Keep a safe summary of the last update sender
+  const chatId = String(ctx?.chat?.id || "");
+  const userId = String(ctx?.from?.id || "");
+  if (chatId) runtimeInfo.lastHandledChatId = chatId;
+  if (userId) runtimeInfo.lastHandledUserId = userId;
+}
+
+export function markLastHandledMessage(runtimeInfo, ctx) {
+  if (!runtimeInfo) return;
+  runtimeInfo.lastHandledAt = new Date().toISOString();
+
+  const chatId = String(ctx?.chat?.id || "");
+  const userId = String(ctx?.from?.id || "");
+  if (chatId) runtimeInfo.lastHandledChatId = chatId;
+  if (userId) runtimeInfo.lastHandledUserId = userId;
+}

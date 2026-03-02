@@ -1,4 +1,9 @@
-import { isAdmin } from "../lib/runtime.js";
+import { isAdmin, getLastError } from "../lib/runtime.js";
+
+function formatUptime() {
+  const s = Math.floor(process.uptime());
+  return String(s);
+}
 
 export default function register(bot) {
   bot.command("health", async (ctx) => {
@@ -6,8 +11,6 @@ export default function register(bot) {
     const isAllowed = isAdmin(ctx.from?.id, adminIds);
 
     if (!isAllowed) {
-      // If ADMIN_TELEGRAM_USER_IDS is not set, keep this command effectively unavailable.
-      // If set but user not admin, keep response generic.
       if (adminIds.length) {
         await ctx.reply("This command is not available.");
       }
@@ -16,14 +19,20 @@ export default function register(bot) {
 
     const info = ctx?.state?.runtimeInfo || {};
 
+    const lastError = String(info.lastError || getLastError() || "").slice(0, 400);
+
     const lines = [
       "Status:",
-      `Update mode: ${String(info.updateMode || "unknown")}`,
-      `Telegram token set: ${Boolean(info.telegramTokenSet)}`,
+      `Active mode: ${String(info.updateMode || "unknown")}`,
+      `Uptime seconds: ${formatUptime()}`,
+      `DB enabled: ${Boolean(info.dbEnabled)}`,
       `DB connected: ${Boolean(info.dbConnected)}`,
       `AI enabled: ${Boolean(info.aiEnabled)}`,
-      `Uptime seconds: ${Math.floor(process.uptime())}`,
-      info.lastError ? `Last error: ${String(info.lastError).slice(0, 300)}` : "Last error: (none)",
+      `Last update received: ${String(info.lastUpdateAt || "") || "(none)"}`,
+      `Last handled message: ${String(info.lastHandledAt || "") || "(none)"}`,
+      `Last handled chatId: ${String(info.lastHandledChatId || "") || "(none)"}`,
+      `Last handled userId: ${String(info.lastHandledUserId || "") || "(none)"}`,
+      lastError ? `Last error: ${lastError}` : "Last error: (none)",
     ];
 
     await ctx.reply(lines.join("\n"));

@@ -10,6 +10,7 @@ import {
   setStatusSafe,
 } from "./services/telegramSender.js";
 import { registerCommands } from "./commands/loader.js";
+import { setLastError, markLastHandledMessage } from "./lib/runtime.js";
 
 const inFlightByChat = new Map();
 
@@ -19,17 +20,17 @@ export function createBotProfile() {
     "Public commands:",
     "1) /start - Welcome and examples",
     "2) /help - How it works, supported links, limitations",
+    "3) /health - Admin-only diagnostics",
     "Key rules:",
     "1) Only public media works (no private/locked/age-restricted/geo-blocked/deleted content).",
     "2) The bot processes the first supported URL found in a message.",
-    "3) For privacy: the bot only uses the link you provide; it does not ask for logins.",
+    "3) /health is admin-only; if no admins are configured it is effectively unavailable.",
   ].join("\n");
 }
 
 export async function buildBot({ token, runtimeInfo, adminIds }) {
   const bot = new Bot(token);
 
-  // Make runtime info available to commands like /health
   bot.use(async (ctx, next) => {
     ctx.state = ctx.state || {};
     ctx.state.runtimeInfo = runtimeInfo || {};
@@ -41,19 +42,21 @@ export async function buildBot({ token, runtimeInfo, adminIds }) {
     try {
       return await prev(method, payload, signal);
     } catch (e) {
+      setLastError(e);
       console.error("[tg] api error", { method, err: safeErr(e) });
       throw e;
     }
   });
 
   bot.catch((err) => {
+    setLastError(err?.error || err);
     console.error("[bot.catch]", {
       err: safeErr(err?.error || err),
       updateId: err?.ctx?.update?.update_id,
     });
   });
 
-  // Register commands first (required so they are not swallowed by catch-all)
+  // Register commands first
   await registerCommands(bot);
 
   bot.on("message:text", async (ctx, next) => {
@@ -64,30 +67,25 @@ export async function buildBot({ token, runtimeInfo, adminIds }) {
     const userId = String(ctx.from?.id || "");
     const messageId = String(ctx.message?.message_id || "");
 
-    console.log("[update] message:text", {
+    // Keep minimal routing logs
+    console.log("[route] link handler", {
       chatId,
-      userId,
-      messageId,
-      hasUrlLike: /https?:\/\//i.test(raw),
+      fromId: userId,
+      hasText: Boolean(raw),
     });
 
     if (!chatId) return;
 
     const extracted = extractFirstSupportedUrl(raw);
 
-    console.log("[url] detect", {
-      chatId,
-      messageId,
-      platform: extracted?.platform || "",
-      supported: Boolean(extracted),
-      ignoredCount: extracted?.ignoredCount || 0,
-    });
-
     if (!extracted) {
+      // Preserve existing behavior: if message has no URL at all, ignore.
       if (!/https?:\/\//i.test(raw)) return;
+
       await ctx.reply(
         "I can only download public media from TikTok and X links.\n\nExamples:\nhttps://www.tiktok.com/@user/video/123\nhttps://x.com/user/status/123"
       );
+      markLastHandledMessage(runtimeInfo, ctx);
       return;
     }
 
@@ -98,7 +96,8 @@ export async function buildBot({ token, runtimeInfo, adminIds }) {
     }
 
     if (inFlightByChat.get(chatId)) {
-      await ctx.reply("I’m working on your last request—please wait.");
+      await ctx.reply("I’m working on your last request…");
+      markLastHandledMessage(runtimeInfo, ctx);
       return;
     }
 
@@ -112,7 +111,10 @@ export async function buildBot({ token, runtimeInfo, adminIds }) {
     });
 
     if (!rlOk) {
-      await ctx.reply("You’re doing that a bit too fast. Please wait a minute and try again.");
+      await ctx.reply(
+        "You’re doing that a bit too fast. Please wait a minute and try again."
+      );
+      markLastHandledMessage(runtimeInfo, ctx);
       return;
     }
 
@@ -162,7 +164,9 @@ export async function buildBot({ token, runtimeInfo, adminIds }) {
       });
 
       await editStatusSafe(ctx, chatId, statusMsgId, "Done.");
+      markLastHandledMessage(runtimeInfo, ctx);
     } catch (e) {
+      setLastError(e);
       const msg = safeErr(e);
       console.error("[download] failed", {
         traceId,
@@ -189,6 +193,7 @@ export async function buildBot({ token, runtimeInfo, adminIds }) {
       }
 
       await editStatusSafe(ctx, chatId, statusMsgId, "Failed.");
+      markLastHandledMessage(runtimeInfo, ctx);
     } finally {
       inFlightByChat.delete(chatId);
     }

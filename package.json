@@ -16,7 +16,8 @@
     "dotenv": "^16.4.5",
     "grammy": "^1.20.0",
     "mongodb": "^6.10.0",
-    "@grammyjs/runner": "^2.0.3"
+    "@grammyjs/runner": "^2.0.3",
+    "express": "latest"
   },
   "devDependencies": {}
 }

@@ -3,12 +3,6 @@ function toInt(v, fallback) {
   return Number.isFinite(n) ? n : fallback;
 }
 
-function toBool(v) {
-  const s = String(v || "").trim().toLowerCase();
-  if (!s) return false;
-  return s === "1" || s === "true" || s === "yes" || s === "on";
-}
-
 function parseAdminIds(raw) {
   const s = String(raw || "").trim();
   if (!s) return [];
@@ -18,33 +12,53 @@ function parseAdminIds(raw) {
     .filter(Boolean);
 }
 
+function trimSlash(u) {
+  return String(u || "").replace(/\/+$/g, "");
+}
+
+function buildWebhookPath(secretMaybe) {
+  const s = String(secretMaybe || "").trim();
+  const suffix = s ? s : "telegram";
+  return "/webhook/" + encodeURIComponent(suffix);
+}
+
 export function getBootConfigSummary(cfg) {
   const adminCount = Array.isArray(cfg.ADMIN_TELEGRAM_USER_IDS)
     ? cfg.ADMIN_TELEGRAM_USER_IDS.length
     : 0;
 
   return {
-    nodeEnv: cfg.NODE_ENV,
-    port: cfg.PORT,
-    telegramTokenSet: Boolean(cfg.TELEGRAM_BOT_TOKEN),
-    adminIdsSet: adminCount > 0,
-    adminIdsCount: adminCount,
-    mongodbUriSet: Boolean(cfg.MONGODB_URI),
-    cookmybotsAiEndpointSet: Boolean(cfg.COOKMYBOTS_AI_ENDPOINT),
-    cookmybotsAiKeySet: Boolean(cfg.COOKMYBOTS_AI_KEY),
-    aiEnabled: Boolean(cfg.AI_ENABLED),
+    TELEGRAM_BOT_TOKEN: Boolean(cfg.TELEGRAM_BOT_TOKEN),
+    ADMIN_TELEGRAM_USER_IDS: adminCount > 0,
+    MONGODB_URI: Boolean(cfg.MONGODB_URI),
+    PUBLIC_BASE_URL: Boolean(cfg.PUBLIC_BASE_URL),
+    COOKMYBOTS_AI_ENDPOINT: Boolean(cfg.COOKMYBOTS_AI_ENDPOINT),
+    COOKMYBOTS_AI_KEY: Boolean(cfg.COOKMYBOTS_AI_KEY),
+    AI_ENABLED: Boolean(cfg.AI_ENABLED),
+  };
+}
+
+export function getWebhookConfigSummary(cfg) {
+  return {
+    WEBHOOK_ENABLED: Boolean(cfg.WEBHOOK_ENABLED),
+    TELEGRAM_WEBHOOK_SECRET: Boolean(cfg.TELEGRAM_WEBHOOK_SECRET),
+    TELEGRAM_WEBHOOK_URL: Boolean(cfg.TELEGRAM_WEBHOOK_URL),
+    TELEGRAM_WEBHOOK_PATH: String(cfg.TELEGRAM_WEBHOOK_PATH || ""),
+    PORT: Number(cfg.PORT || 0),
   };
 }
 
 export function getConfig(env = process.env) {
+  const base = trimSlash(env.PUBLIC_BASE_URL || "");
+  const secret = String(env.TELEGRAM_WEBHOOK_SECRET || "").trim();
+  const webhookPath = buildWebhookPath(secret);
+  const webhookUrl = base ? base + webhookPath : "";
+
   const cfg = {
     NODE_ENV: String(env.NODE_ENV || "development"),
     PORT: toInt(env.PORT, 3000),
 
     TELEGRAM_BOT_TOKEN: String(env.TELEGRAM_BOT_TOKEN || ""),
-
-    // Optional
-    TELEGRAM_WEBHOOK_URL: String(env.TELEGRAM_WEBHOOK_URL || ""),
 
     // Optional: admin-only features
     ADMIN_TELEGRAM_USER_IDS: parseAdminIds(env.ADMIN_TELEGRAM_USER_IDS),
@@ -56,10 +70,6 @@ export function getConfig(env = process.env) {
     RATE_LIMIT_X_PER_MIN: toInt(env.RATE_LIMIT_X_PER_MIN, 6),
     RATE_LIMIT_TIKTOK_PER_MIN: toInt(env.RATE_LIMIT_TIKTOK_PER_MIN, 6),
 
-    // Downloader gateway (optional)
-    MEDIA_DOWNLOAD_ENDPOINT: String(env.MEDIA_DOWNLOAD_ENDPOINT || ""),
-    MEDIA_DOWNLOAD_KEY: String(env.MEDIA_DOWNLOAD_KEY || ""),
-
     // Network tuning
     HTTP_TIMEOUT_MS: toInt(env.HTTP_TIMEOUT_MS, 20_000),
     HTTP_MAX_REDIRECTS: toInt(env.HTTP_MAX_REDIRECTS, 5),
@@ -67,7 +77,7 @@ export function getConfig(env = process.env) {
     MAX_MEDIA_BYTES: toInt(env.MAX_MEDIA_BYTES, 45 * 1024 * 1024),
     HTTP_USER_AGENT: String(env.HTTP_USER_AGENT || ""),
 
-    // AI gateway (optional; do not crash if missing)
+    // Optional AI gateway (do not crash if missing)
     COOKMYBOTS_AI_ENDPOINT: String(env.COOKMYBOTS_AI_ENDPOINT || ""),
     COOKMYBOTS_AI_KEY: String(env.COOKMYBOTS_AI_KEY || ""),
     AI_TIMEOUT_MS: toInt(env.AI_TIMEOUT_MS, 600_000),
@@ -76,12 +86,20 @@ export function getConfig(env = process.env) {
     // Logs / Heartbeat
     HEARTBEAT_MS: toInt(env.HEARTBEAT_MS, 60_000),
 
-    // RapidAPI (optional; used by downloader fallback)
+    // Webhook mode (optional)
+    PUBLIC_BASE_URL: base,
+    TELEGRAM_WEBHOOK_SECRET: secret,
+    TELEGRAM_WEBHOOK_PATH: webhookPath,
+    TELEGRAM_WEBHOOK_URL: webhookUrl,
+
+    // RapidAPI (optional)
     RAPIDAPI_KEY: String(env.RAPIDAPI_KEY || ""),
   };
 
   cfg.AI_ENABLED = Boolean(cfg.COOKMYBOTS_AI_ENDPOINT) && Boolean(cfg.COOKMYBOTS_AI_KEY);
-  cfg.WEBHOOK_ENABLED = Boolean(cfg.TELEGRAM_WEBHOOK_URL);
+
+  // Webhook is enabled ONLY when PUBLIC_BASE_URL is set.
+  cfg.WEBHOOK_ENABLED = Boolean(cfg.PUBLIC_BASE_URL);
 
   return cfg;
 }
